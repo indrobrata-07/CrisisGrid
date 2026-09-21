@@ -52,27 +52,14 @@ from dispatch_engine import build_dispatch_plan
 from frontend import router as frontend_router
 
 
-# ===================================================
-# FASTAPI APPLICATION
-# ===================================================
-
-app = FastAPI(
-    title="ResQ API",
-    description=(
-        "AI-Powered Disaster Response "
-        "Coordination Backend"
-    ),
-    version="1.1.0",
-)
 
 
-# ===================================================
-# CORS MIDDLEWARE
-# ===================================================
+
+app = FastAPI(title="ResQ API", version="1.1.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # Allows requests from Vercel
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
