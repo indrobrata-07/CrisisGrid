@@ -1,831 +1,2141 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Report Emergency | CrisisGrid</title>
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Report Emergency | ResQ
+    </title>
+
+
     <style>
+
         /* =================================================
            GLOBAL
         ================================================== */
+
         * {
             box-sizing: border-box;
         }
 
+
         body {
+
             margin: 0;
+
             min-height: 100vh;
-            font-family: Arial, Helvetica, sans-serif;
-            background: linear-gradient(145deg, #0f172a, #111827);
-            color: #e2e8f0;
-            display: flex;
-            flex-direction: column;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #0f172a,
+                    #111827
+                );
+
+            color:
+                #e2e8f0;
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
         }
 
-        button, textarea, input {
-            font-family: inherit;
+
+        button,
+        textarea,
+        input {
+
+            font-family:
+                inherit;
         }
+
 
         /* =================================================
            HEADER
         ================================================== */
+
         .topbar {
+
             height: 68px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 24px;
-            background: rgba(17, 24, 39, 0.95);
-            border-bottom: 1px solid #334155;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            padding:
+                0 24px;
+
+            background:
+                rgba(
+                    17,
+                    24,
+                    39,
+                    0.95
+                );
+
+            border-bottom:
+                1px solid #334155;
         }
+
 
         .brand {
-            display: flex;
-            align-items: center;
-            gap: 11px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                11px;
         }
+
 
         .logo {
-            width: 40px;
-            height: 40px;
-            border-radius: 11px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #dc2626;
-            color: white;
-            font-weight: bold;
-            font-size: 21px;
+
+            width:
+                40px;
+
+            height:
+                40px;
+
+            border-radius:
+                11px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            background:
+                #dc2626;
+
+            color:
+                white;
+
+            font-weight:
+                bold;
+
+            font-size:
+                21px;
         }
+
 
         .brand-name {
-            font-size: 20px;
-            font-weight: bold;
+
+            font-size:
+                20px;
+
+            font-weight:
+                bold;
         }
+
 
         .brand-subtitle {
-            color: #94a3b8;
-            font-size: 11px;
-            margin-top: 2px;
+
+            color:
+                #94a3b8;
+
+            font-size:
+                11px;
+
+            margin-top:
+                2px;
         }
+
 
         .command-link {
-            color: #93c5fd;
-            text-decoration: none;
-            font-size: 12px;
-            padding: 8px 11px;
-            border: 1px solid #334155;
-            border-radius: 8px;
+
+            color:
+                #93c5fd;
+
+            text-decoration:
+                none;
+
+            font-size:
+                12px;
+
+            padding:
+                8px 11px;
+
+            border:
+                1px solid #334155;
+
+            border-radius:
+                8px;
         }
 
+
         .command-link:hover {
-            background: #1e293b;
+
+            background:
+                #1e293b;
         }
+
 
         /* =================================================
            MAIN
         ================================================== */
+
         .page {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 32px 20px;
+
+            flex:
+                1;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            padding:
+                32px 20px;
         }
 
+
         .report-card {
-            width: 100%;
-            max-width: 610px;
-            background: rgba(30, 41, 59, 0.92);
-            border: 1px solid #334155;
-            border-radius: 20px;
-            padding: 28px;
-            box-shadow: 0 22px 60px rgba(0, 0, 0, 0.35);
+
+            width:
+                100%;
+
+            max-width:
+                610px;
+
+            background:
+                rgba(
+                    30,
+                    41,
+                    59,
+                    0.92
+                );
+
+            border:
+                1px solid #334155;
+
+            border-radius:
+                20px;
+
+            padding:
+                28px;
+
+            box-shadow:
+                0 22px 60px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.35
+                );
         }
+
 
         /* =================================================
            INTRO
         ================================================== */
+
         .emergency-icon {
-            width: 52px;
-            height: 52px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 15px;
-            background: rgba(220, 38, 38, 0.15);
-            font-size: 27px;
-            margin-bottom: 15px;
+
+            width:
+                52px;
+
+            height:
+                52px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            border-radius:
+                15px;
+
+            background:
+                rgba(
+                    220,
+                    38,
+                    38,
+                    0.15
+                );
+
+            font-size:
+                27px;
+
+            margin-bottom:
+                15px;
         }
+
 
         h1 {
-            margin: 0;
-            font-size: 27px;
+
+            margin:
+                0;
+
+            font-size:
+                27px;
         }
 
+
         .subtitle {
-            margin-top: 8px;
-            margin-bottom: 25px;
-            color: #94a3b8;
-            line-height: 1.5;
-            font-size: 13px;
+
+            margin-top:
+                8px;
+
+            margin-bottom:
+                25px;
+
+            color:
+                #94a3b8;
+
+            line-height:
+                1.5;
+
+            font-size:
+                13px;
         }
+
 
         /* =================================================
            FORM
         ================================================== */
+
         .field {
-            margin-bottom: 20px;
+
+            margin-bottom:
+                20px;
         }
+
 
         label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 12px;
-            font-weight: bold;
-            color: #cbd5e1;
+
+            display:
+                block;
+
+            margin-bottom:
+                8px;
+
+            font-size:
+                12px;
+
+            font-weight:
+                bold;
+
+            color:
+                #cbd5e1;
         }
+
 
         textarea {
-            width: 100%;
-            min-height: 135px;
-            resize: vertical;
-            padding: 14px;
-            background: #0f172a;
-            border: 1px solid #475569;
-            border-radius: 11px;
-            color: white;
-            font-size: 14px;
-            line-height: 1.5;
-            outline: none;
+
+            width:
+                100%;
+
+            min-height:
+                135px;
+
+            resize:
+                vertical;
+
+            padding:
+                14px;
+
+            background:
+                #0f172a;
+
+            border:
+                1px solid #475569;
+
+            border-radius:
+                11px;
+
+            color:
+                white;
+
+            font-size:
+                14px;
+
+            line-height:
+                1.5;
+
+            outline:
+                none;
         }
 
-        textarea:focus, input:focus {
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+
+        textarea:focus,
+        input:focus {
+
+            border-color:
+                #3b82f6;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(
+                    59,
+                    130,
+                    246,
+                    0.12
+                );
         }
+
 
         input {
-            width: 100%;
-            padding: 12px 14px;
-            background: #0f172a;
-            border: 1px solid #475569;
-            border-radius: 10px;
-            color: white;
-            outline: none;
-            font-size: 13px;
+
+            width:
+                100%;
+
+            padding:
+                12px 14px;
+
+            background:
+                #0f172a;
+
+            border:
+                1px solid #475569;
+
+            border-radius:
+                10px;
+
+            color:
+                white;
+
+            outline:
+                none;
+
+            font-size:
+                13px;
         }
 
+
         .helper {
-            margin-top: 7px;
-            color: #64748b;
-            font-size: 10px;
+
+            margin-top:
+                7px;
+
+            color:
+                #64748b;
+
+            font-size:
+                10px;
         }
+
 
         /* =================================================
            LOCATION
         ================================================== */
+
         .location-box {
-            background: #0f172a;
-            border: 1px solid #334155;
-            border-radius: 12px;
-            padding: 14px;
+
+            background:
+                #0f172a;
+
+            border:
+                1px solid #334155;
+
+            border-radius:
+                12px;
+
+            padding:
+                14px;
         }
+
 
         .location-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            gap:
+                10px;
         }
+
 
         .location-status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 12px;
-            color: #cbd5e1;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                8px;
+
+            font-size:
+                12px;
+
+            color:
+                #cbd5e1;
         }
+
 
         .location-dot {
-            width: 9px;
-            height: 9px;
-            border-radius: 50%;
-            background: #64748b;
+
+            width:
+                9px;
+
+            height:
+                9px;
+
+            border-radius:
+                50%;
+
+            background:
+                #64748b;
         }
+
 
         .location-dot.detected {
-            background: #22c55e;
-            box-shadow: 0 0 8px rgba(34, 197, 94, 0.7);
+
+            background:
+                #22c55e;
+
+            box-shadow:
+                0 0 8px
+                rgba(
+                    34,
+                    197,
+                    94,
+                    0.7
+                );
         }
+
 
         .location-dot.loading {
-            background: #f59e0b;
+
+            background:
+                #f59e0b;
         }
+
 
         .location-dot.failed {
-            background: #ef4444;
+
+            background:
+                #ef4444;
         }
+
 
         .gps-button {
-            border: none;
-            padding: 8px 11px;
-            border-radius: 8px;
-            background: #334155;
-            color: white;
-            font-size: 11px;
-            cursor: pointer;
+
+            border:
+                none;
+
+            padding:
+                8px 11px;
+
+            border-radius:
+                8px;
+
+            background:
+                #334155;
+
+            color:
+                white;
+
+            font-size:
+                11px;
+
+            cursor:
+                pointer;
         }
+
 
         .gps-button:hover {
-            background: #475569;
+
+            background:
+                #475569;
         }
 
+
         .coordinates {
-            margin-top: 11px;
-            color: #94a3b8;
-            font-size: 10px;
-            line-height: 1.6;
+
+            margin-top:
+                11px;
+
+            color:
+                #94a3b8;
+
+            font-size:
+                10px;
+
+            line-height:
+                1.6;
         }
+
 
         /* =================================================
            BUTTON
         ================================================== */
+
         .report-button {
-            width: 100%;
-            margin-top: 7px;
-            padding: 14px;
-            border: none;
-            border-radius: 11px;
-            background: #dc2626;
-            color: white;
-            font-size: 13px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s ease;
+
+            width:
+                100%;
+
+            margin-top:
+                7px;
+
+            padding:
+                14px;
+
+            border:
+                none;
+
+            border-radius:
+                11px;
+
+            background:
+                #dc2626;
+
+            color:
+                white;
+
+            font-size:
+                13px;
+
+            font-weight:
+                bold;
+
+            cursor:
+                pointer;
+
+            transition:
+                0.2s ease;
         }
+
 
         .report-button:hover:not(:disabled) {
-            background: #ef4444;
-            transform: translateY(-1px);
+
+            background:
+                #ef4444;
+
+            transform:
+                translateY(-1px);
         }
 
+
         .report-button:disabled {
-            opacity: 0.45;
-            cursor: not-allowed;
+
+            opacity:
+                0.45;
+
+            cursor:
+                not-allowed;
         }
+
 
         /* =================================================
            MESSAGES
         ================================================== */
+
         .message {
-            display: none;
-            margin-top: 16px;
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 12px;
-            line-height: 1.5;
+
+            display:
+                none;
+
+            margin-top:
+                16px;
+
+            padding:
+                12px;
+
+            border-radius:
+                10px;
+
+            font-size:
+                12px;
+
+            line-height:
+                1.5;
         }
+
 
         .message.error {
-            display: block;
-            background: rgba(220, 38, 38, 0.12);
-            color: #fecaca;
-            border: 1px solid rgba(220, 38, 38, 0.25);
+
+            display:
+                block;
+
+            background:
+                rgba(
+                    220,
+                    38,
+                    38,
+                    0.12
+                );
+
+            color:
+                #fecaca;
+
+            border:
+                1px solid
+                rgba(
+                    220,
+                    38,
+                    38,
+                    0.25
+                );
         }
 
+
         .message.info {
-            display: block;
-            background: rgba(59, 130, 246, 0.12);
-            color: #bfdbfe;
-            border: 1px solid rgba(59, 130, 246, 0.25);
+
+            display:
+                block;
+
+            background:
+                rgba(
+                    59,
+                    130,
+                    246,
+                    0.12
+                );
+
+            color:
+                #bfdbfe;
+
+            border:
+                1px solid
+                rgba(
+                    59,
+                    130,
+                    246,
+                    0.25
+                );
         }
+
 
         /* =================================================
            SUCCESS RESULT
         ================================================== */
+
         .result {
-            display: none;
-            margin-top: 24px;
-            border-top: 1px solid #334155;
-            padding-top: 22px;
+
+            display:
+                none;
+
+            margin-top:
+                24px;
+
+            border-top:
+                1px solid #334155;
+
+            padding-top:
+                22px;
         }
+
 
         .result.visible {
-            display: block;
+
+            display:
+                block;
         }
+
 
         .success-title {
-            display: flex;
-            align-items: center;
-            gap: 9px;
-            font-weight: bold;
-            font-size: 17px;
-            color: #86efac;
-            margin-bottom: 14px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                9px;
+
+            font-weight:
+                bold;
+
+            font-size:
+                17px;
+
+            color:
+                #86efac;
+
+            margin-bottom:
+                14px;
         }
+
 
         .priority-result {
-            display: inline-block;
-            padding: 5px 10px;
-            border-radius: 20px;
-            color: white;
-            font-weight: bold;
-            font-size: 11px;
-            margin-bottom: 14px;
+
+            display:
+                inline-block;
+
+            padding:
+                5px 10px;
+
+            border-radius:
+                20px;
+
+            color:
+                white;
+
+            font-weight:
+                bold;
+
+            font-size:
+                11px;
+
+            margin-bottom:
+                14px;
         }
+
 
         .critical {
-            background: #dc2626;
+            background:
+                #dc2626;
         }
+
 
         .high {
-            background: #f97316;
+            background:
+                #f97316;
         }
+
 
         .medium {
-            background: #eab308;
+            background:
+                #eab308;
         }
+
 
         .low {
-            background: #2563eb;
+            background:
+                #2563eb;
         }
+
 
         .result-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 12px;
+
+            display:
+                grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap:
+                10px;
+
+            margin-bottom:
+                12px;
         }
+
 
         .result-box {
-            background: #0f172a;
-            border: 1px solid #334155;
-            border-radius: 9px;
-            padding: 11px;
+
+            background:
+                #0f172a;
+
+            border:
+                1px solid #334155;
+
+            border-radius:
+                9px;
+
+            padding:
+                11px;
         }
+
 
         .result-label {
-            color: #64748b;
-            font-size: 9px;
-            text-transform: uppercase;
-            margin-bottom: 5px;
+
+            color:
+                #64748b;
+
+            font-size:
+                9px;
+
+            text-transform:
+                uppercase;
+
+            margin-bottom:
+                5px;
         }
+
 
         .result-value {
-            font-size: 13px;
-            font-weight: bold;
-            text-transform: capitalize;
+
+            font-size:
+                13px;
+
+            font-weight:
+                bold;
+
+            text-transform:
+                capitalize;
         }
+
 
         .resource-list {
-            background: #0f172a;
-            border: 1px solid #334155;
-            border-radius: 9px;
-            padding: 11px;
-            color: #cbd5e1;
-            font-size: 12px;
-            line-height: 1.6;
+
+            background:
+                #0f172a;
+
+            border:
+                1px solid #334155;
+
+            border-radius:
+                9px;
+
+            padding:
+                11px;
+
+            color:
+                #cbd5e1;
+
+            font-size:
+                12px;
+
+            line-height:
+                1.6;
         }
+
 
         .new-report-button {
-            width: 100%;
-            margin-top: 15px;
-            padding: 11px;
-            border: 1px solid #475569;
-            border-radius: 9px;
-            background: transparent;
-            color: #cbd5e1;
-            cursor: pointer;
+
+            width:
+                100%;
+
+            margin-top:
+                15px;
+
+            padding:
+                11px;
+
+            border:
+                1px solid #475569;
+
+            border-radius:
+                9px;
+
+            background:
+                transparent;
+
+            color:
+                #cbd5e1;
+
+            cursor:
+                pointer;
         }
 
+
         .new-report-button:hover {
-            background: #334155;
+
+            background:
+                #334155;
         }
+
 
         /* =================================================
            PRIVACY
         ================================================== */
+
         .privacy-note {
-            margin-top: 18px;
-            color: #64748b;
-            font-size: 10px;
-            text-align: center;
-            line-height: 1.5;
+
+            margin-top:
+                18px;
+
+            color:
+                #64748b;
+
+            font-size:
+                10px;
+
+            text-align:
+                center;
+
+            line-height:
+                1.5;
         }
+
 
         /* =================================================
            RESPONSIVE
         ================================================== */
-        @media (max-width: 600px) {
+
+        @media (
+            max-width: 600px
+        ) {
+
             .topbar {
-                padding: 0 15px;
+
+                padding:
+                    0 15px;
             }
+
 
             .command-link {
-                display: none;
+
+                display:
+                    none;
             }
+
 
             .report-card {
-                padding: 22px 18px;
-                border-radius: 15px;
+
+                padding:
+                    22px 18px;
+
+                border-radius:
+                    15px;
             }
+
 
             .result-grid {
-                grid-template-columns: 1fr;
+
+                grid-template-columns:
+                    1fr;
             }
 
+
             .location-header {
-                align-items: flex-start;
-                flex-direction: column;
+
+                align-items:
+                    flex-start;
+
+                flex-direction:
+                    column;
             }
         }
+
     </style>
+
 </head>
+
+
 <body>
+
 
 <!-- =====================================================
      HEADER
 ====================================================== -->
+
 <header class="topbar">
+
     <div class="brand">
+
         <div class="logo">
             R
         </div>
+
         <div>
+
             <div class="brand-name">
-                CrisisGrid
+                ResQ
             </div>
+
             <div class="brand-subtitle">
                 Emergency Response Platform
             </div>
+
         </div>
+
     </div>
 
-    <a class="command-link" href="/dashboard.html">
+
+    <a
+        class="command-link"
+        href="/dashboard"
+    >
         Command Center →
     </a>
+
 </header>
+
+
 
 <!-- =====================================================
      PAGE
 ====================================================== -->
+
 <main class="page">
+
+
     <section class="report-card">
+
+
         <div class="emergency-icon">
             🚨
         </div>
+
 
         <h1>
             Report an Emergency
         </h1>
 
+
         <div class="subtitle">
+
             Describe what is happening in your own words.
-            CrisisGrid will structure the report and send it to
+
+            ResQ will structure the report and send it to
             the command center.
+
         </div>
+
+
 
         <!-- =============================================
              DESCRIPTION
         ============================================== -->
+
         <div class="field">
+
             <label for="description">
                 WHAT IS HAPPENING?
             </label>
+
+
             <textarea
+
                 id="description"
+
                 placeholder="Example: Flood water is rising quickly. Four people are trapped upstairs and one elderly person cannot walk."
+
                 maxlength="1500"
+
             ></textarea>
+
+
             <div class="helper">
+
                 Include important details such as injuries,
                 trapped people, children, elderly people,
                 or changing conditions.
+
             </div>
+
         </div>
+
+
 
         <!-- =============================================
              LOCATION LABEL
         ============================================== -->
+
         <div class="field">
+
             <label for="locationName">
                 AREA / LANDMARK
             </label>
+
+
             <input
+
                 id="locationName"
+
                 type="text"
+
                 placeholder="Example: College Street, near Medical College"
+
                 maxlength="120"
+
             >
+
+
             <div class="helper">
+
                 This helps responders understand the location.
                 GPS coordinates are captured separately.
+
             </div>
+
         </div>
+
+
 
         <!-- =============================================
              GPS
         ============================================== -->
+
         <div class="field">
+
             <label>
                 CURRENT LOCATION
             </label>
+
+
             <div class="location-box">
+
+
                 <div class="location-header">
+
+
                     <div class="location-status">
-                        <div id="locationDot" class="location-dot"></div>
+
+                        <div
+                            id="locationDot"
+                            class="location-dot"
+                        >
+                        </div>
+
+
                         <span id="locationStatus">
+
                             Location not detected
+
                         </span>
+
                     </div>
 
+
                     <button
+
                         id="gpsButton"
+
                         class="gps-button"
+
                         type="button"
+
                         onclick="detectLocation()"
+
                     >
+
                         📍 Use my location
+
                     </button>
+
+
                 </div>
 
-                <div id="coordinates" class="coordinates">
-                    Latitude: —<br>
+
+                <div
+                    id="coordinates"
+                    class="coordinates"
+                >
+
+                    Latitude: —
+                    <br>
                     Longitude: —
+
                 </div>
+
+
             </div>
+
         </div>
+
+
 
         <!-- =============================================
              SUBMIT
         ============================================== -->
+
         <button
+
             id="reportButton"
+
             class="report-button"
+
             type="button"
+
             onclick="submitEmergency()"
+
         >
+
             🚨 REPORT EMERGENCY
+
         </button>
 
-        <div id="message" class="message"></div>
+
+        <div
+            id="message"
+            class="message"
+        >
+        </div>
+
+
 
         <!-- =============================================
              RESULT
         ============================================== -->
-        <div id="result" class="result">
+
+        <div
+            id="result"
+            class="result"
+        >
+
+
             <div class="success-title">
-                <span>✓</span>
+
+                <span>
+                    ✓
+                </span>
+
                 Emergency Report Received
+
             </div>
 
-            <div id="priorityBadge" class="priority-result"></div>
+
+            <div
+                id="priorityBadge"
+                class="priority-result"
+            >
+            </div>
+
 
             <div class="result-grid">
-                <div class="result-box">
-                    <div class="result-label">Disaster</div>
-                    <div id="resultDisaster" class="result-value"></div>
-                </div>
+
 
                 <div class="result-box">
-                    <div class="result-label">People affected</div>
-                    <div id="resultPeople" class="result-value"></div>
+
+                    <div class="result-label">
+                        Disaster
+                    </div>
+
+                    <div
+                        id="resultDisaster"
+                        class="result-value"
+                    >
+                    </div>
+
                 </div>
 
-                <div class="result-box">
-                    <div class="result-label">Injuries</div>
-                    <div id="resultInjuries" class="result-value"></div>
-                </div>
 
                 <div class="result-box">
-                    <div class="result-label">Vulnerable people</div>
-                    <div id="resultVulnerable" class="result-value"></div>
+
+                    <div class="result-label">
+                        People affected
+                    </div>
+
+                    <div
+                        id="resultPeople"
+                        class="result-value"
+                    >
+                    </div>
+
                 </div>
+
+
+                <div class="result-box">
+
+                    <div class="result-label">
+                        Injuries
+                    </div>
+
+                    <div
+                        id="resultInjuries"
+                        class="result-value"
+                    >
+                    </div>
+
+                </div>
+
+
+                <div class="result-box">
+
+                    <div class="result-label">
+                        Vulnerable people
+                    </div>
+
+                    <div
+                        id="resultVulnerable"
+                        class="result-value"
+                    >
+                    </div>
+
+                </div>
+
+
             </div>
 
-            <div class="result-label">Response resources identified</div>
 
-            <div id="resultResources" class="resource-list"></div>
+            <div class="result-label">
+                Response resources identified
+            </div>
 
-            <button class="new-report-button" onclick="resetReport()">
+
+            <div
+                id="resultResources"
+                class="resource-list"
+            >
+            </div>
+
+
+            <button
+                class="new-report-button"
+                onclick="resetReport()"
+            >
+
                 Report Another Emergency
+
             </button>
+
+
         </div>
 
+
+
         <div class="privacy-note">
+
             Location is requested only when you choose
             “Use my location” and is submitted with the
             emergency report.
+
         </div>
+
+
     </section>
+
+
 </main>
 
+
+
 <script>
-    const API_BASE_URL = "https://crisisgrid-alq9.onrender.com";
+
+    // =================================================
+    // API BASE URL
+    // =================================================
+
+    const API_BASE_URL = "http://127.0.0.1:8000";
+
 
     // =================================================
     // STATE
     // =================================================
-    let currentLatitude = null;
-    let currentLongitude = null;
+
+    let currentLatitude =
+        null;
+
+
+    let currentLongitude =
+        null;
+
+
 
     // =================================================
     // LOCATION
     // =================================================
-    function detectLocation() {
-        const dot = document.getElementById("locationDot");
-        const status = document.getElementById("locationStatus");
-        const button = document.getElementById("gpsButton");
 
-        if (!navigator.geolocation) {
-            dot.className = "location-dot failed";
-            status.textContent = "Location is not supported by this browser";
-            showMessage("This browser cannot provide your current location.", "error");
+    function detectLocation() {
+
+        const dot =
+            document.getElementById(
+                "locationDot"
+            );
+
+
+        const status =
+            document.getElementById(
+                "locationStatus"
+            );
+
+
+        const button =
+            document.getElementById(
+                "gpsButton"
+            );
+
+
+        // ---------------------------------------------
+        // Browser does not support GPS
+        // ---------------------------------------------
+
+        if (
+            !navigator.geolocation
+        ) {
+
+            dot.className =
+                "location-dot failed";
+
+
+            status.textContent =
+                "Location is not supported by this browser";
+
+
+            showMessage(
+                "This browser cannot provide your current location.",
+                "error"
+            );
+
+
             return;
         }
 
-        dot.className = "location-dot loading";
-        status.textContent = "Detecting current location...";
-        button.disabled = true;
-        button.textContent = "Detecting...";
 
-        navigator.geolocation.getCurrentPosition(
+        // ---------------------------------------------
+        // Loading
+        // ---------------------------------------------
+
+        dot.className =
+            "location-dot loading";
+
+
+        status.textContent =
+            "Detecting current location...";
+
+
+        button.disabled =
+            true;
+
+
+        button.textContent =
+            "Detecting...";
+
+
+        // ---------------------------------------------
+        // Browser GPS request
+        // ---------------------------------------------
+
+        navigator.geolocation
+        .getCurrentPosition(
+
             function(position) {
-                currentLatitude = position.coords.latitude;
-                currentLongitude = position.coords.longitude;
 
-                dot.className = "location-dot detected";
-                status.textContent = "Current location detected";
-                button.disabled = false;
-                button.textContent = "✓ Location detected";
+                currentLatitude =
+                    position
+                    .coords
+                    .latitude;
 
-                document.getElementById("coordinates").innerHTML = `
-                    Latitude: ${currentLatitude.toFixed(6)}<br>
-                    Longitude: ${currentLongitude.toFixed(6)}
-                `;
+
+                currentLongitude =
+                    position
+                    .coords
+                    .longitude;
+
+
+                dot.className =
+                    "location-dot detected";
+
+
+                status.textContent =
+                    "Current location detected";
+
+
+                button.disabled =
+                    false;
+
+
+                button.textContent =
+                    "✓ Location detected";
+
+
+                document
+                .getElementById(
+                    "coordinates"
+                )
+                .innerHTML =
+                    `
+                    Latitude:
+                    ${currentLatitude.toFixed(6)}
+                    <br>
+
+                    Longitude:
+                    ${currentLongitude.toFixed(6)}
+                    `;
+
+
                 clearMessage();
             },
-            function(error) {
-                currentLatitude = null;
-                currentLongitude = null;
-                dot.className = "location-dot failed";
-                button.disabled = false;
-                button.textContent = "📍 Try again";
 
-                let message = "Could not detect your location.";
-                if (error.code === error.PERMISSION_DENIED) {
-                    message = "Location permission was denied. Please allow location access and try again.";
-                } else if (error.code === error.POSITION_UNAVAILABLE) {
-                    message = "Your device could not determine its current location.";
-                } else if (error.code === error.TIMEOUT) {
-                    message = "Location detection timed out. Please try again.";
+
+            function(error) {
+
+                currentLatitude =
+                    null;
+
+
+                currentLongitude =
+                    null;
+
+
+                dot.className =
+                    "location-dot failed";
+
+
+                button.disabled =
+                    false;
+
+
+                button.textContent =
+                    "📍 Try again";
+
+
+                let message =
+                    "Could not detect your location.";
+
+
+                if (
+                    error.code
+                    ===
+                    error.PERMISSION_DENIED
+                ) {
+
+                    message =
+                        "Location permission was denied. Please allow location access and try again.";
                 }
 
-                status.textContent = "Location unavailable";
-                showMessage(message, "error");
+
+                else if (
+                    error.code
+                    ===
+                    error.POSITION_UNAVAILABLE
+                ) {
+
+                    message =
+                        "Your device could not determine its current location.";
+                }
+
+
+                else if (
+                    error.code
+                    ===
+                    error.TIMEOUT
+                ) {
+
+                    message =
+                        "Location detection timed out. Please try again.";
+                }
+
+
+                status.textContent =
+                    "Location unavailable";
+
+
+                showMessage(
+                    message,
+                    "error"
+                );
             },
+
+
             {
-                enableHighAccuracy: true,
-                timeout: 12000,
-                maximumAge: 0
+
+                enableHighAccuracy:
+                    true,
+
+                timeout:
+                    12000,
+
+                maximumAge:
+                    0
             }
         );
     }
 
+
+
     // =================================================
     // SUBMIT EMERGENCY
     // =================================================
+
     async function submitEmergency() {
-        const description = document.getElementById("description").value.trim();
-        const locationName = document.getElementById("locationName").value.trim();
-        const button = document.getElementById("reportButton");
 
-        if (description.length < 5) {
-            showMessage("Please describe the emergency before submitting.", "error");
+        const description =
+            document
+            .getElementById(
+                "description"
+            )
+            .value
+            .trim();
+
+
+        const locationName =
+            document
+            .getElementById(
+                "locationName"
+            )
+            .value
+            .trim();
+
+
+        const button =
+            document
+            .getElementById(
+                "reportButton"
+            );
+
+
+        // ---------------------------------------------
+        // Validate description
+        // ---------------------------------------------
+
+        if (
+            description.length
+            <
+            5
+        ) {
+
+            showMessage(
+                "Please describe the emergency before submitting.",
+                "error"
+            );
+
             return;
         }
 
-        if (locationName.length < 1) {
-            showMessage("Please enter an area or nearby landmark.", "error");
+
+        // ---------------------------------------------
+        // Validate human-readable location
+        // ---------------------------------------------
+
+        if (
+            locationName.length
+            <
+            1
+        ) {
+
+            showMessage(
+                "Please enter an area or nearby landmark.",
+                "error"
+            );
+
             return;
         }
 
-        if (currentLatitude === null || currentLongitude === null) {
-            showMessage("Please use the location button before reporting the emergency.", "error");
+
+        // ---------------------------------------------
+        // Require GPS for our routing MVP
+        // ---------------------------------------------
+
+        if (
+            currentLatitude
+            ===
+            null
+
+            ||
+
+            currentLongitude
+            ===
+            null
+        ) {
+
+            showMessage(
+                "Please use the location button before reporting the emergency.",
+                "error"
+            );
+
             return;
         }
 
-        button.disabled = true;
-        button.textContent = "Analyzing emergency...";
-        showMessage("CrisisGrid is analyzing the report and creating the incident...", "info");
+
+        // ---------------------------------------------
+        // Loading state
+        // ---------------------------------------------
+
+        button.disabled =
+            true;
+
+
+        button.textContent =
+            "Analyzing emergency...";
+
+
+        showMessage(
+            "ResQ is analyzing the report and creating the incident...",
+            "info"
+        );
+
 
         try {
-            const response = await fetch(`${API_BASE_URL}/incidents`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    description: description,
-                    location: locationName,
-                    latitude: currentLatitude,
-                    longitude: currentLongitude
-                })
-            });
 
-            const data = await response.json();
+            const response =
+                await fetch(
 
-            if (!response.ok) {
-                throw new Error(data.detail || "Emergency report could not be submitted.");
+                    `${API_BASE_URL}/incidents`,
+
+                    {
+
+                        method:
+                            "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                description:
+                                    description,
+
+                                location:
+                                    locationName,
+
+                                latitude:
+                                    currentLatitude,
+
+                                longitude:
+                                    currentLongitude
+                            })
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (
+                !response.ok
+            ) {
+
+                throw new Error(
+                    data.detail
+                    ||
+                    "Emergency report could not be submitted."
+                );
             }
 
-            clearMessage();
-            displayResult(data);
-            button.textContent = "✓ REPORT SUBMITTED";
 
-        } catch (error) {
-            showMessage(error.message, "error");
-            button.disabled = false;
-            button.textContent = "🚨 REPORT EMERGENCY";
+            clearMessage();
+
+
+            displayResult(
+                data
+            );
+
+
+            button.textContent =
+                "✓ REPORT SUBMITTED";
+
+        }
+
+        catch (
+            error
+        ) {
+
+            showMessage(
+                error.message,
+                "error"
+            );
+
+
+            button.disabled =
+                false;
+
+
+            button.textContent =
+                "🚨 REPORT EMERGENCY";
         }
     }
+
+
 
     // =================================================
     // DISPLAY RESULT
     // =================================================
-    function displayResult(data) {
-        const incident = data.incident;
-        const priority = data.priority;
-        const priorityLevel = (priority.level || "LOW").toLowerCase();
 
-        const result = document.getElementById("result");
-        result.classList.add("visible");
+    function displayResult(
+        data
+    ) {
 
-        const badge = document.getElementById("priorityBadge");
-        badge.className = `priority-result ${priorityLevel}`;
-        badge.textContent = `${priority.score} ${priority.level}`;
+        const incident =
+            data.incident;
 
-        document.getElementById("resultDisaster").textContent = incident.disaster_type;
-        document.getElementById("resultPeople").textContent = incident.people_affected;
-        document.getElementById("resultInjuries").textContent = incident.injuries;
-        document.getElementById("resultVulnerable").textContent = incident.vulnerable_people;
 
-        const resources = incident.required_resources || [];
-        document.getElementById("resultResources").innerHTML = resources.length > 0
-            ? resources.map(resource => `• ${escapeHtml(resource)}`).join("<br>")
-            : "No specific resources identified";
+        const priority =
+            data.priority;
 
+
+        const priorityLevel =
+            (
+                priority.level
+                ||
+                "LOW"
+            ).toLowerCase();
+
+
+        const result =
+            document
+            .getElementById(
+                "result"
+            );
+
+
+        result.classList.add(
+            "visible"
+        );
+
+
+        const badge =
+            document
+            .getElementById(
+                "priorityBadge"
+            );
+
+
+        badge.className =
+            `priority-result ${priorityLevel}`;
+
+
+        badge.textContent =
+            `${priority.score} ${priority.level}`;
+
+
+        document
+        .getElementById(
+            "resultDisaster"
+        )
+        .textContent =
+            incident.disaster_type;
+
+
+        document
+        .getElementById(
+            "resultPeople"
+        )
+        .textContent =
+            incident.people_affected;
+
+
+        document
+        .getElementById(
+            "resultInjuries"
+        )
+        .textContent =
+            incident.injuries;
+
+
+        document
+        .getElementById(
+            "resultVulnerable"
+        )
+        .textContent =
+            incident.vulnerable_people;
+
+
+        const resources = (
+            incident.required_resources
+            ||
+            []
+        );
+
+
+        document
+        .getElementById(
+            "resultResources"
+        )
+        .innerHTML =
+            resources.length
+            >
+            0
+
+            ?
+
+            resources
+            .map(
+                resource =>
+                    `• ${escapeHtml(resource)}`
+            )
+            .join("<br>")
+
+            :
+
+            "No specific resources identified";
+
+
+        // Scroll result into view
         result.scrollIntoView({
-            behavior: "smooth",
-            block: "nearest"
+
+            behavior:
+                "smooth",
+
+            block:
+                "nearest"
         });
     }
+
+
 
     // =================================================
     // RESET
     // =================================================
-    function resetReport() {
-        document.getElementById("description").value = "";
-        document.getElementById("locationName").value = "";
-        document.getElementById("result").classList.remove("visible");
 
-        const button = document.getElementById("reportButton");
-        button.disabled = false;
-        button.textContent = "🚨 REPORT EMERGENCY";
+    function resetReport() {
+
+        document
+        .getElementById(
+            "description"
+        )
+        .value =
+            "";
+
+
+        document
+        .getElementById(
+            "locationName"
+        )
+        .value =
+            "";
+
+
+        document
+        .getElementById(
+            "result"
+        )
+        .classList
+        .remove(
+            "visible"
+        );
+
+
+        const button =
+            document
+            .getElementById(
+                "reportButton"
+            );
+
+
+        button.disabled =
+            false;
+
+
+        button.textContent =
+            "🚨 REPORT EMERGENCY";
+
 
         clearMessage();
+
+
+        // Keep GPS coordinates.
+        //
+        // If the citizen is reporting another nearby
+        // emergency, there is no need to request
+        // permission again.
     }
+
+
 
     // =================================================
     // MESSAGES
     // =================================================
-    function showMessage(text, type) {
-        const message = document.getElementById("message");
-        message.className = `message ${type}`;
-        message.textContent = text;
+
+    function showMessage(
+        text,
+        type
+    ) {
+
+        const message =
+            document
+            .getElementById(
+                "message"
+            );
+
+
+        message.className =
+            `message ${type}`;
+
+
+        message.textContent =
+            text;
     }
 
+
+
     function clearMessage() {
-        const message = document.getElementById("message");
-        message.className = "message";
-        message.textContent = "";
+
+        const message =
+            document
+            .getElementById(
+                "message"
+            );
+
+
+        message.className =
+            "message";
+
+
+        message.textContent =
+            "";
     }
+
+
 
     // =================================================
     // HTML SAFETY
     // =================================================
-    function escapeHtml(value) {
-        if (value === null || value === undefined) {
+
+    function escapeHtml(
+        value
+    ) {
+
+        if (
+            value
+            ===
+            null
+
+            ||
+
+            value
+            ===
+            undefined
+        ) {
+
             return "";
         }
+
+
         return String(value)
-            .replaceAll("&", "&amp;")
-            .replaceAll("<", "&lt;")
-            .replaceAll(">", "&gt;")
-            .replaceAll('"', "&quot;")
-            .replaceAll("'", "&#039;");
+
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
     }
+
 </script>
+
+
 </body>
+
 </html>
