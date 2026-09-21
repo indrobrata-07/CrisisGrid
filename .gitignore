@@ -1,0 +1,11 @@
+.env
+
+resq.db
+resq.db-shm
+resq.db-wal
+
+__pycache__/
+*.pyc
+
+.venv/
+venv/

@@ -1,0 +1,5056 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>CrisisGrid Command Center</title>
+
+
+    <!-- =================================================
+         LEAFLET
+    ================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+
+
+    <!-- =================================================
+         MARKER CLUSTER
+    ================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"
+    />
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"
+    />
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background: #0f172a;
+
+            color: #e2e8f0;
+
+            overflow: hidden;
+        }
+
+
+        /* =================================================
+           HEADER
+        ================================================== */
+
+        .topbar {
+
+            height: 70px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 0 24px;
+
+            background: #111827;
+
+            border-bottom:
+                1px solid #334155;
+
+            position: relative;
+
+            z-index: 1000;
+        }
+
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+        }
+
+
+        .brand-logo {
+
+            width: 42px;
+
+            height: 42px;
+
+            border-radius: 12px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: #dc2626;
+
+            font-size: 23px;
+
+            font-weight: bold;
+        }
+
+
+        .brand h1 {
+
+            margin: 0;
+
+            font-size: 22px;
+        }
+
+
+        .brand-subtitle {
+
+            margin-top: 2px;
+
+            color: #94a3b8;
+
+            font-size: 12px;
+        }
+
+
+        .live-area {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            color: #cbd5e1;
+
+            font-size: 14px;
+        }
+
+
+        .live-dot {
+
+            width: 10px;
+
+            height: 10px;
+
+            border-radius: 50%;
+
+            background: #22c55e;
+
+            box-shadow:
+                0 0 10px #22c55e;
+        }
+
+
+        /* =================================================
+           LAYOUT
+        ================================================== */
+
+        .layout {
+
+            height:
+                calc(100vh - 70px);
+
+            display: grid;
+
+            grid-template-columns:
+                350px 1fr;
+        }
+
+
+        /* =================================================
+           SIDEBAR
+        ================================================== */
+
+        .sidebar {
+
+            background: #111827;
+
+            border-right:
+                1px solid #334155;
+
+            overflow-y: auto;
+
+            padding: 18px;
+        }
+
+
+        .sidebar-title {
+
+            margin:
+                0 0 14px 0;
+
+            font-size: 15px;
+
+            color: #cbd5e1;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing: 1px;
+        }
+
+
+        /* =================================================
+           STATS
+        ================================================== */
+
+        .stats-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 10px;
+
+            margin-bottom: 18px;
+        }
+
+
+        .stat-card {
+
+            background: #1e293b;
+
+            border:
+                1px solid #334155;
+
+            border-radius: 12px;
+
+            padding: 13px;
+        }
+
+
+        .stat-number {
+
+            font-size: 25px;
+
+            font-weight: bold;
+
+            margin-bottom: 4px;
+        }
+
+
+        .stat-label {
+
+            color: #94a3b8;
+
+            font-size: 11px;
+
+            text-transform:
+                uppercase;
+        }
+
+
+        /* =================================================
+           RESOURCE SUMMARY
+        ================================================== */
+
+        .resource-summary {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 8px;
+
+            margin-bottom: 22px;
+        }
+
+
+        .resource-summary-card {
+
+            background: #172033;
+
+            border:
+                1px solid #334155;
+
+            border-radius: 10px;
+
+            padding: 10px 12px;
+        }
+
+
+        .resource-summary-number {
+
+            font-size: 18px;
+
+            font-weight: bold;
+        }
+
+
+        .resource-summary-label {
+
+            margin-top: 3px;
+
+            color: #94a3b8;
+
+            font-size: 10px;
+
+            text-transform:
+                uppercase;
+        }
+
+
+        /* =================================================
+           INCIDENT LIST
+        ================================================== */
+
+        .incident-list {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 10px;
+        }
+
+
+        .incident-card {
+
+            background: #1e293b;
+
+            border:
+                1px solid #334155;
+
+            border-left:
+                4px solid transparent;
+
+            border-radius: 12px;
+
+            padding: 13px;
+
+            cursor: pointer;
+
+            transition:
+                0.2s ease;
+        }
+
+
+        .incident-card:hover {
+
+            background: #243247;
+
+            border-color: #64748b;
+
+            transform:
+                translateY(-1px);
+        }
+
+
+        .incident-card.selected {
+
+            background: #26364d;
+
+            box-shadow:
+                0 0 0 2px
+                rgba(
+                    59,
+                    130,
+                    246,
+                    0.5
+                );
+        }
+
+
+        .incident-card.no-gps {
+
+            opacity: 0.65;
+
+            cursor: default;
+        }
+
+
+        .incident-card.no-gps:hover {
+
+            transform: none;
+        }
+
+
+        .incident-card-header {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content:
+                space-between;
+
+            gap: 10px;
+        }
+
+
+        .incident-type {
+
+            font-weight: 600;
+
+            text-transform:
+                capitalize;
+        }
+
+
+        .priority-badge {
+
+            padding: 4px 8px;
+
+            border-radius: 20px;
+
+            font-size: 10px;
+
+            font-weight: bold;
+
+            color: white;
+
+            white-space: nowrap;
+        }
+
+
+        .incident-location {
+
+            color: #94a3b8;
+
+            font-size: 12px;
+
+            margin-top: 7px;
+        }
+
+
+        .incident-description {
+
+            color: #cbd5e1;
+
+            font-size: 12px;
+
+            margin-top: 8px;
+
+            line-height: 1.4;
+        }
+
+
+        .incident-meta {
+
+            margin-top: 10px;
+
+            font-size: 11px;
+
+            color: #94a3b8;
+
+            display: flex;
+
+            justify-content:
+                space-between;
+        }
+
+
+        .gps-warning {
+
+            margin-top: 9px;
+
+            padding: 6px 8px;
+
+            border-radius: 7px;
+
+            font-size: 10px;
+
+            background:
+                rgba(
+                    245,
+                    158,
+                    11,
+                    0.12
+                );
+
+            color: #fbbf24;
+        }
+
+
+        /* =================================================
+           MAP
+        ================================================== */
+
+        .map-container {
+
+            position: relative;
+
+            min-width: 0;
+        }
+
+
+        #map {
+
+            width: 100%;
+
+            height: 100%;
+        }
+
+
+        /* =================================================
+           INCIDENT MARKERS
+        ================================================== */
+
+        .incident-marker {
+
+            width: 24px;
+
+            height: 24px;
+
+            border-radius: 50%;
+
+            border:
+                3px solid white;
+
+            box-shadow:
+                0 0 0 4px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.16
+                );
+
+            position: relative;
+        }
+
+
+        .incident-marker::after {
+
+            content: "";
+
+            position: absolute;
+
+            top: 50%;
+
+            left: 50%;
+
+            width: 32px;
+
+            height: 32px;
+
+            transform:
+                translate(
+                    -50%,
+                    -50%
+                );
+
+            border-radius: 50%;
+
+            border:
+                2px solid
+                currentColor;
+
+            animation:
+                pulse 2s infinite;
+        }
+
+
+        .incident-marker.resolved::after {
+
+            display: none;
+        }
+
+
+        @keyframes pulse {
+
+            0% {
+
+                transform:
+                    translate(
+                        -50%,
+                        -50%
+                    )
+                    scale(0.6);
+
+                opacity: 1;
+            }
+
+
+            100% {
+
+                transform:
+                    translate(
+                        -50%,
+                        -50%
+                    )
+                    scale(1.5);
+
+                opacity: 0;
+            }
+        }
+
+
+        /* =================================================
+           CLUSTERS
+        ================================================== */
+
+        .resQ-cluster {
+
+            width: 42px;
+
+            height: 42px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color: white;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            border:
+                3px solid white;
+
+            box-shadow:
+                0 4px 18px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.35
+                );
+        }
+
+
+        .cluster-critical {
+            background: #dc2626;
+        }
+
+
+        .cluster-high {
+            background: #f97316;
+        }
+
+
+        .cluster-medium {
+            background: #eab308;
+        }
+
+
+        .cluster-low {
+            background: #2563eb;
+        }
+
+
+        .cluster-resolved {
+            background: #64748b;
+        }
+
+
+        /* =================================================
+           RESOURCE MARKERS
+        ================================================== */
+
+        .resource-marker {
+
+            width: 38px;
+
+            height: 38px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: white;
+
+            border-radius: 10px;
+
+            font-size: 21px;
+
+            border:
+                4px solid;
+
+            box-shadow:
+                0 5px 14px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.35
+                );
+        }
+
+
+        .resource-available {
+
+            border-color: #22c55e;
+        }
+
+
+        .resource-assigned {
+
+            border-color: #f97316;
+        }
+
+
+        .resource-busy {
+
+            border-color: #dc2626;
+        }
+
+
+        .resource-offline {
+
+            border-color: #64748b;
+
+            opacity: 0.65;
+        }
+
+
+        /* =================================================
+           COLORS
+        ================================================== */
+
+        .critical {
+            background: #dc2626;
+        }
+
+
+        .high {
+            background: #f97316;
+        }
+
+
+        .medium {
+            background: #eab308;
+        }
+
+
+        .low {
+            background: #2563eb;
+        }
+
+
+        .resolved {
+            background: #64748b;
+        }
+
+
+        /* =================================================
+           DISPATCH PANEL
+        ================================================== */
+
+        .dispatch-panel {
+
+            position: absolute;
+
+            z-index: 850;
+
+            left: 20px;
+
+            bottom: 20px;
+
+            width: 370px;
+
+            max-height:
+                calc(100% - 120px);
+
+            overflow-y: auto;
+
+            background:
+                rgba(
+                    15,
+                    23,
+                    42,
+                    0.96
+                );
+
+            border:
+                1px solid #475569;
+
+            border-radius: 16px;
+
+            box-shadow:
+                0 15px 40px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.45
+                );
+
+            padding: 16px;
+        }
+
+
+        .dispatch-panel.hidden {
+
+            display: none;
+        }
+
+
+        .panel-top {
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                flex-start;
+
+            gap: 12px;
+
+            margin-bottom: 12px;
+        }
+
+
+        .panel-title {
+
+            font-weight: bold;
+
+            font-size: 16px;
+
+            text-transform:
+                capitalize;
+        }
+
+
+        .panel-subtitle {
+
+            margin-top: 4px;
+
+            font-size: 11px;
+
+            color: #94a3b8;
+        }
+
+
+        .close-panel {
+
+            background: transparent;
+
+            border: none;
+
+            color: #94a3b8;
+
+            font-size: 20px;
+
+            cursor: pointer;
+        }
+
+
+        .close-panel:hover {
+
+            color: white;
+        }
+
+
+        .selected-priority {
+
+            display: inline-block;
+
+            color: white;
+
+            padding: 4px 9px;
+
+            border-radius: 20px;
+
+            font-size: 10px;
+
+            font-weight: bold;
+
+            margin-bottom: 10px;
+        }
+
+
+        .incident-info {
+
+            padding:
+                10px 0;
+
+            border-top:
+                1px solid #334155;
+
+            border-bottom:
+                1px solid #334155;
+
+            font-size: 12px;
+
+            color: #cbd5e1;
+
+            line-height: 1.6;
+        }
+
+
+        .dispatch-section-title {
+
+            margin:
+                14px 0 8px 0;
+
+            color: #94a3b8;
+
+            font-size: 10px;
+
+            letter-spacing: 1px;
+
+            text-transform:
+                uppercase;
+
+            font-weight: bold;
+        }
+
+
+        .recommendation-card {
+
+            background: #1e293b;
+
+            border:
+                1px solid #475569;
+
+            border-radius: 12px;
+
+            padding: 12px;
+
+            margin-top: 8px;
+        }
+
+
+        .recommendation-name {
+
+            font-weight: bold;
+
+            font-size: 14px;
+        }
+
+
+        .recommendation-covers {
+
+            margin-top: 5px;
+
+            color: #94a3b8;
+
+            font-size: 11px;
+        }
+
+
+        .route-metrics {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 8px;
+
+            margin-top: 10px;
+        }
+
+
+        .metric {
+
+            background: #0f172a;
+
+            border-radius: 9px;
+
+            padding: 9px;
+        }
+
+
+        .metric-value {
+
+            font-size: 16px;
+
+            font-weight: bold;
+        }
+
+
+        .metric-label {
+
+            margin-top: 3px;
+
+            color: #94a3b8;
+
+            font-size: 9px;
+
+            text-transform:
+                uppercase;
+        }
+
+
+        .action-button {
+
+            width: 100%;
+
+            border: none;
+
+            border-radius: 10px;
+
+            padding: 12px;
+
+            margin-top: 12px;
+
+            color: white;
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition:
+                0.2s ease;
+        }
+
+
+        .action-button:hover {
+
+            transform:
+                translateY(-1px);
+
+            filter:
+                brightness(1.1);
+        }
+
+
+        .action-button:disabled {
+
+            opacity: 0.5;
+
+            cursor: not-allowed;
+
+            transform: none;
+        }
+
+
+        .dispatch-button {
+
+            background: #2563eb;
+        }
+
+
+        .start-button {
+
+            background: #f97316;
+        }
+
+
+        .resolve-button {
+
+            background: #16a34a;
+        }
+
+
+        .recalculate-button {
+
+            background: #475569;
+        }
+
+
+        .panel-message {
+
+            padding: 10px;
+
+            margin-top: 10px;
+
+            border-radius: 9px;
+
+            font-size: 11px;
+
+            line-height: 1.45;
+
+            background:
+                rgba(
+                    59,
+                    130,
+                    246,
+                    0.12
+                );
+
+            color: #bfdbfe;
+        }
+
+
+        .panel-error {
+
+            background:
+                rgba(
+                    220,
+                    38,
+                    38,
+                    0.12
+                );
+
+            color: #fecaca;
+        }
+
+
+        .panel-success {
+
+            background:
+                rgba(
+                    34,
+                    197,
+                    94,
+                    0.12
+                );
+
+            color: #bbf7d0;
+        }
+
+
+        .loading {
+
+            padding: 20px 5px;
+
+            text-align: center;
+
+            color: #94a3b8;
+
+            font-size: 12px;
+        }
+
+
+        .assignment-row {
+
+            background: #1e293b;
+
+            border:
+                1px solid #334155;
+
+            border-radius: 9px;
+
+            padding: 10px;
+
+            margin-top: 7px;
+
+            font-size: 11px;
+        }
+
+
+        /* =================================================
+           LEGEND
+        ================================================== */
+
+        .legend {
+
+            position: absolute;
+
+            z-index: 800;
+
+            bottom: 20px;
+
+            right: 20px;
+
+            width: 190px;
+
+            background:
+                rgba(
+                    15,
+                    23,
+                    42,
+                    0.95
+                );
+
+            padding: 14px 16px;
+
+            border:
+                1px solid #475569;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 10px 30px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.3
+                );
+        }
+
+
+        .legend-title {
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+            margin-bottom: 9px;
+        }
+
+
+        .legend-section {
+
+            margin-top: 13px;
+
+            padding-top: 11px;
+
+            border-top:
+                1px solid #334155;
+        }
+
+
+        .legend-row {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            margin: 7px 0;
+
+            font-size: 11px;
+
+            color: #cbd5e1;
+        }
+
+
+        .legend-dot {
+
+            width: 10px;
+
+            height: 10px;
+
+            border-radius: 50%;
+        }
+
+
+        .legend-resource {
+
+            width: 24px;
+
+            height: 24px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 7px;
+
+            background: white;
+
+            border:
+                2px solid #22c55e;
+
+            font-size: 14px;
+        }
+
+
+        /* =================================================
+           POPUPS
+        ================================================== */
+
+        .popup-content {
+
+            min-width: 235px;
+
+            max-width: 310px;
+        }
+
+
+        .popup-title {
+
+            font-weight: bold;
+
+            font-size: 16px;
+
+            text-transform:
+                capitalize;
+
+            margin-bottom: 8px;
+        }
+
+
+        .popup-row {
+
+            margin: 5px 0;
+
+            color: #334155;
+
+            font-size: 12px;
+        }
+
+
+        .popup-description {
+
+            margin-top: 9px;
+
+            padding-top: 8px;
+
+            border-top:
+                1px solid #e2e8f0;
+
+            font-size: 12px;
+
+            line-height: 1.4;
+
+            color: #475569;
+        }
+
+
+        @media (
+            max-width: 900px
+        ) {
+
+            .layout {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .sidebar {
+
+                display: none;
+            }
+
+
+            .dispatch-panel {
+
+                width:
+                    calc(100% - 40px);
+
+                max-width: 380px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+====================================================== -->
+
+<header class="topbar">
+
+    <div class="brand">
+
+        <div class="brand-logo">
+            R
+        </div>
+
+
+        <div>
+
+            <h1>
+                CrisisGrid Command Center
+            </h1>
+
+            <div class="brand-subtitle">
+                Disaster Response Coordination
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="live-area">
+
+        <div class="live-dot"></div>
+
+        <span>LIVE</span>
+
+        <span id="lastUpdated">
+            Connecting...
+        </span>
+
+    </div>
+
+</header>
+
+
+
+<!-- =====================================================
+     MAIN
+====================================================== -->
+
+<main class="layout">
+
+
+    <!-- =================================================
+         SIDEBAR
+    ================================================== -->
+
+    <aside class="sidebar">
+
+        <h2 class="sidebar-title">
+            Emergency Overview
+        </h2>
+
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+
+                <div
+                    class="stat-number"
+                    id="totalCount"
+                >
+                    0
+                </div>
+
+                <div class="stat-label">
+                    Incidents
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div
+                    class="stat-number"
+                    id="criticalCount"
+                >
+                    0
+                </div>
+
+                <div class="stat-label">
+                    Critical
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div
+                    class="stat-number"
+                    id="activeCount"
+                >
+                    0
+                </div>
+
+                <div class="stat-label">
+                    Active
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div
+                    class="stat-number"
+                    id="resolvedCount"
+                >
+                    0
+                </div>
+
+                <div class="stat-label">
+                    Resolved
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="resource-summary">
+
+            <div class="resource-summary-card">
+
+                <div
+                    class="resource-summary-number"
+                    id="resourceCount"
+                >
+                    0
+                </div>
+
+                <div class="resource-summary-label">
+                    Resources
+                </div>
+
+            </div>
+
+
+            <div class="resource-summary-card">
+
+                <div
+                    class="resource-summary-number"
+                    id="availableResourceCount"
+                >
+                    0
+                </div>
+
+                <div class="resource-summary-label">
+                    Available
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <h2 class="sidebar-title">
+            Priority Queue
+        </h2>
+
+
+        <div
+            id="incidentList"
+            class="incident-list"
+        >
+        </div>
+
+    </aside>
+
+
+
+    <!-- =================================================
+         MAP
+    ================================================== -->
+
+    <section class="map-container">
+
+        <div id="map"></div>
+
+
+        <!-- =============================================
+             DISPATCH PANEL
+        ============================================== -->
+
+        <div
+            id="dispatchPanel"
+            class="
+                dispatch-panel
+                hidden
+            "
+        >
+
+            <div class="panel-top">
+
+                <div>
+
+                    <div
+                        id="panelTitle"
+                        class="panel-title"
+                    >
+                        Incident
+                    </div>
+
+                    <div
+                        id="panelLocation"
+                        class="panel-subtitle"
+                    >
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="close-panel"
+                    onclick="closeDispatchPanel()"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div id="dispatchPanelContent">
+            </div>
+
+        </div>
+
+
+        <!-- =============================================
+             LEGEND
+        ============================================== -->
+
+        <div class="legend">
+
+            <div class="legend-title">
+                Incident Priority
+            </div>
+
+
+            <div class="legend-row">
+
+                <div
+                    class="
+                        legend-dot
+                        critical
+                    "
+                ></div>
+
+                Critical
+
+            </div>
+
+
+            <div class="legend-row">
+
+                <div
+                    class="
+                        legend-dot
+                        high
+                    "
+                ></div>
+
+                High
+
+            </div>
+
+
+            <div class="legend-row">
+
+                <div
+                    class="
+                        legend-dot
+                        medium
+                    "
+                ></div>
+
+                Medium
+
+            </div>
+
+
+            <div class="legend-row">
+
+                <div
+                    class="
+                        legend-dot
+                        low
+                    "
+                ></div>
+
+                Low
+
+            </div>
+
+
+            <div class="legend-row">
+
+                <div
+                    class="
+                        legend-dot
+                        resolved
+                    "
+                ></div>
+
+                Resolved
+
+            </div>
+
+
+            <div class="legend-section">
+
+                <div class="legend-title">
+                    Rescue Resources
+                </div>
+
+
+                <div class="legend-row">
+
+                    <div class="legend-resource">
+                        🚤
+                    </div>
+
+                    Boat team
+
+                </div>
+
+
+                <div class="legend-row">
+
+                    <div class="legend-resource">
+                        🚑
+                    </div>
+
+                    Ambulance
+
+                </div>
+
+
+                <div class="legend-row">
+
+                    <div class="legend-resource">
+                        🛟
+                    </div>
+
+                    Rescue team
+
+                </div>
+
+
+                <div class="legend-row">
+
+                    <div class="legend-resource">
+                        🩺
+                    </div>
+
+                    Medical team
+
+                </div>
+
+            </div>
+
+
+            <div class="legend-section">
+
+                <div class="legend-title">
+                    Resource Status
+                </div>
+
+
+                <div class="legend-row">
+
+                    <div
+                        class="legend-dot"
+                        style="
+                            background:#22c55e
+                        "
+                    ></div>
+
+                    Available
+
+                </div>
+
+
+                <div class="legend-row">
+
+                    <div
+                        class="legend-dot"
+                        style="
+                            background:#f97316
+                        "
+                    ></div>
+
+                    Assigned
+
+                </div>
+
+
+                <div class="legend-row">
+
+                    <div
+                        class="legend-dot"
+                        style="
+                            background:#dc2626
+                        "
+                    ></div>
+
+                    Busy
+
+                </div>
+
+
+                <div class="legend-row">
+
+                    <div
+                        class="legend-dot"
+                        style="
+                            background:#64748b
+                        "
+                    ></div>
+
+                    Offline
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+
+<!-- =====================================================
+     LEAFLET
+====================================================== -->
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+
+<script
+    src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js">
+</script>
+
+
+
+<script>
+
+    // =================================================
+    // MAP
+    // =================================================
+
+    const map = L.map(
+        "map"
+    ).setView(
+        [
+            22.5726,
+            88.3639
+        ],
+        13
+    );
+
+
+    L.tileLayer(
+
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+
+        {
+
+            maxZoom: 19,
+
+            attribution:
+                "&copy; OpenStreetMap contributors"
+        }
+
+    ).addTo(map);
+
+
+    // =================================================
+    // GLOBAL STATE
+    // =================================================
+
+    let currentIncidents = [];
+
+    let currentResources = [];
+
+    let selectedIncidentId = null;
+
+    let currentDispatchPlan = null;
+
+    let hasFittedMap = false;
+
+
+    let markersByIncident = {};
+
+    let markersByResource = {};
+
+
+    // =================================================
+    // ROUTE / HIGHLIGHT LAYER
+    // =================================================
+
+    const routeLayer =
+        L.layerGroup()
+        .addTo(map);
+
+
+    // =================================================
+    // PRIORITY RANK
+    // =================================================
+
+    const priorityRank = {
+
+        resolved: 0,
+
+        low: 1,
+
+        medium: 2,
+
+        high: 3,
+
+        critical: 4
+    };
+
+
+    // =================================================
+    // INCIDENT CLUSTER LAYER
+    // =================================================
+
+    const incidentLayer =
+        L.markerClusterGroup({
+
+            maxClusterRadius: 45,
+
+            zoomToBoundsOnClick: true,
+
+            spiderfyOnMaxZoom: true,
+
+            spiderfyDistanceMultiplier: 1.6,
+
+            showCoverageOnHover: false,
+
+
+            iconCreateFunction:
+                function(cluster) {
+
+                    const children =
+                        cluster
+                        .getAllChildMarkers();
+
+
+                    let highestClass =
+                        "resolved";
+
+
+                    let highestRank =
+                        0;
+
+
+                    children.forEach(
+                        function(marker) {
+
+                            const markerClass =
+                                marker
+                                .resqPriorityClass
+                                ||
+                                "low";
+
+
+                            const rank =
+                                priorityRank[
+                                    markerClass
+                                ]
+                                ??
+                                1;
+
+
+                            if (
+                                rank
+                                >
+                                highestRank
+                            ) {
+
+                                highestRank =
+                                    rank;
+
+                                highestClass =
+                                    markerClass;
+                            }
+                        }
+                    );
+
+
+                    return L.divIcon({
+
+                        className: "",
+
+                        html:
+                            `
+                            <div
+                                class="
+                                    resq-cluster
+                                    cluster-${highestClass}
+                                "
+                            >
+                                ${
+                                    cluster
+                                    .getChildCount()
+                                }
+                            </div>
+                            `,
+
+                        iconSize:
+                            [
+                                42,
+                                42
+                            ],
+
+                        iconAnchor:
+                            [
+                                21,
+                                21
+                            ]
+                    });
+                }
+        });
+
+
+    incidentLayer.addTo(map);
+
+
+    // =================================================
+    // RESOURCE LAYER
+    // =================================================
+
+    const resourceLayer =
+        L.layerGroup()
+        .addTo(map);
+
+
+    // =================================================
+    // LAYER CONTROL
+    // =================================================
+
+    L.control.layers(
+
+        null,
+
+        {
+
+            "🚨 Incidents":
+                incidentLayer,
+
+            "🚑 Rescue Resources":
+                resourceLayer
+        },
+
+        {
+
+            collapsed: false
+        }
+
+    ).addTo(map);
+
+
+
+    // =================================================
+    // HTML SAFETY
+    // =================================================
+
+    function escapeHtml(
+        value
+    ) {
+
+        if (
+            value === null
+            ||
+            value === undefined
+        ) {
+
+            return "";
+        }
+
+
+        return String(value)
+
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+    }
+
+
+
+    // =================================================
+    // PRIORITY
+    // =================================================
+
+    function getPriorityClass(
+        incident,
+        priority
+    ) {
+
+        if (
+            incident.status
+            ===
+            "resolved"
+        ) {
+
+            return "resolved";
+        }
+
+
+        const level = (
+            priority.level
+            ||
+            "LOW"
+        ).toUpperCase();
+
+
+        if (
+            level ===
+            "CRITICAL"
+        ) {
+
+            return "critical";
+        }
+
+
+        if (
+            level ===
+            "HIGH"
+        ) {
+
+            return "high";
+        }
+
+
+        if (
+            level ===
+            "MEDIUM"
+        ) {
+
+            return "medium";
+        }
+
+
+        return "low";
+    }
+
+
+
+    function getPriorityColor(
+        priorityClass
+    ) {
+
+        const colors = {
+
+            critical:
+                "#dc2626",
+
+            high:
+                "#f97316",
+
+            medium:
+                "#eab308",
+
+            low:
+                "#2563eb",
+
+            resolved:
+                "#64748b"
+        };
+
+
+        return (
+            colors[
+                priorityClass
+            ]
+            ||
+            colors.low
+        );
+    }
+
+
+
+    // =================================================
+    // INCIDENT ICON
+    // =================================================
+
+    function createIncidentIcon(
+        priorityClass
+    ) {
+
+        const color =
+            getPriorityColor(
+                priorityClass
+            );
+
+
+        return L.divIcon({
+
+            className: "",
+
+            html:
+                `
+                <div
+
+                    class="
+                        incident-marker
+                        ${priorityClass}
+                    "
+
+                    style="
+                        color:${color}
+                    "
+                >
+                </div>
+                `,
+
+            iconSize:
+                [
+                    24,
+                    24
+                ],
+
+            iconAnchor:
+                [
+                    12,
+                    12
+                ],
+
+            popupAnchor:
+                [
+                    0,
+                    -15
+                ]
+        });
+    }
+
+
+
+    // =================================================
+    // RESOURCE ICON
+    // =================================================
+
+    function getResourceEmoji(
+        resource
+    ) {
+
+        const type = (
+            resource.resource_type
+            ||
+            ""
+        ).toLowerCase();
+
+
+        const equipment = (
+            resource.equipment
+            ||
+            []
+        ).map(
+            value =>
+                String(value)
+                .toLowerCase()
+        );
+
+
+        const capabilities = (
+            resource.capabilities
+            ||
+            []
+        ).map(
+            value =>
+                String(value)
+                .toLowerCase()
+        );
+
+
+        if (
+            equipment.includes(
+                "boat"
+            )
+
+            ||
+
+            capabilities.includes(
+                "flood_rescue"
+            )
+        ) {
+
+            return "🚤";
+        }
+
+
+        if (
+            type.includes(
+                "ambulance"
+            )
+        ) {
+
+            return "🚑";
+        }
+
+
+        if (
+            type.includes(
+                "medical"
+            )
+
+            ||
+
+            capabilities.includes(
+                "emergency_medical_support"
+            )
+        ) {
+
+            return "🩺";
+        }
+
+
+        if (
+            type.includes(
+                "rescue"
+            )
+        ) {
+
+            return "🛟";
+        }
+
+
+        return "🚨";
+    }
+
+
+
+    function getResourceStatusClass(
+        resource
+    ) {
+
+        const status = (
+            resource.status
+            ||
+            "offline"
+        ).toLowerCase();
+
+
+        if (
+            status ===
+            "available"
+        ) {
+
+            return "resource-available";
+        }
+
+
+        if (
+            status ===
+            "assigned"
+        ) {
+
+            return "resource-assigned";
+        }
+
+
+        if (
+            status ===
+            "busy"
+        ) {
+
+            return "resource-busy";
+        }
+
+
+        return "resource-offline";
+    }
+
+
+
+    function createResourceIcon(
+        resource
+    ) {
+
+        return L.divIcon({
+
+            className: "",
+
+            html:
+                `
+                <div
+                    class="
+                        resource-marker
+                        ${
+                            getResourceStatusClass(
+                                resource
+                            )
+                        }
+                    "
+                >
+
+                    ${
+                        getResourceEmoji(
+                            resource
+                        )
+                    }
+
+                </div>
+                `,
+
+            iconSize:
+                [
+                    38,
+                    38
+                ],
+
+            iconAnchor:
+                [
+                    19,
+                    19
+                ],
+
+            popupAnchor:
+                [
+                    0,
+                    -22
+                ]
+        });
+    }
+
+
+
+    // =================================================
+    // POPUPS
+    // =================================================
+
+    function buildIncidentPopup(
+        incident,
+        priority
+    ) {
+
+        return `
+            <div class="popup-content">
+
+                <div class="popup-title">
+
+                    🚨
+                    ${
+                        escapeHtml(
+                            incident.disaster_type
+                        )
+                    }
+
+                </div>
+
+
+                <div class="popup-row">
+
+                    <strong>
+                        Priority:
+                    </strong>
+
+                    ${
+                        escapeHtml(
+                            priority.score
+                        )
+                    }
+
+                    ${
+                        escapeHtml(
+                            priority.level
+                        )
+                    }
+
+                </div>
+
+
+                <div class="popup-row">
+
+                    <strong>
+                        Status:
+                    </strong>
+
+                    ${
+                        escapeHtml(
+                            incident.status
+                        )
+                    }
+
+                </div>
+
+
+                <div class="popup-row">
+
+                    <strong>
+                        People:
+                    </strong>
+
+                    ${
+                        escapeHtml(
+                            incident.people_affected
+                        )
+                    }
+
+                </div>
+
+
+                <div class="popup-row">
+
+                    <strong>
+                        Location:
+                    </strong>
+
+                    ${
+                        escapeHtml(
+                            incident.location
+                        )
+                    }
+
+                </div>
+
+
+                <div class="popup-description">
+
+                    ${
+                        escapeHtml(
+                            incident.description
+                        )
+                    }
+
+                </div>
+
+            </div>
+        `;
+    }
+
+
+
+    function buildResourcePopup(
+        resource
+    ) {
+
+        return `
+            <div class="popup-content">
+
+                <div class="popup-title">
+
+                    ${
+                        getResourceEmoji(
+                            resource
+                        )
+                    }
+
+                    ${
+                        escapeHtml(
+                            resource.name
+                        )
+                    }
+
+                </div>
+
+
+                <div class="popup-row">
+
+                    <strong>
+                        Status:
+                    </strong>
+
+                    ${
+                        escapeHtml(
+                            resource.status
+                        )
+                    }
+
+                </div>
+
+
+                <div class="popup-row">
+
+                    <strong>
+                        Type:
+                    </strong>
+
+                    ${
+                        escapeHtml(
+                            resource.resource_type
+                        )
+                    }
+
+                </div>
+
+
+                <div class="popup-row">
+
+                    <strong>
+                        Capacity:
+                    </strong>
+
+                    ${
+                        escapeHtml(
+                            resource.capacity
+                        )
+                    }
+
+                </div>
+
+
+                <div class="popup-row">
+
+                    <strong>
+                        Location:
+                    </strong>
+
+                    ${
+                        escapeHtml(
+                            resource.location
+                        )
+                    }
+
+                </div>
+
+
+                <div class="popup-row">
+
+                    <strong>
+                        Assignment:
+                    </strong>
+
+                    ${
+                        escapeHtml(
+                            resource.current_assignment
+                            ||
+                            "None"
+                        )
+                    }
+
+                </div>
+
+            </div>
+        `;
+    }
+
+
+
+    // =================================================
+    // STATS
+    // =================================================
+
+    function updateStats() {
+
+        let critical = 0;
+
+        let active = 0;
+
+        let resolved = 0;
+
+
+        currentIncidents.forEach(
+            function(item) {
+
+                if (
+                    item.incident.status
+                    ===
+                    "resolved"
+                ) {
+
+                    resolved += 1;
+
+                    return;
+                }
+
+
+                active += 1;
+
+
+                if (
+                    (
+                        item.priority.level
+                        ||
+                        ""
+                    ).toUpperCase()
+                    ===
+                    "CRITICAL"
+                ) {
+
+                    critical += 1;
+                }
+            }
+        );
+
+
+        const availableResources =
+            currentResources.filter(
+                resource =>
+                    resource.status
+                    ===
+                    "available"
+            ).length;
+
+
+        document
+            .getElementById(
+                "totalCount"
+            )
+            .textContent =
+                currentIncidents.length;
+
+
+        document
+            .getElementById(
+                "criticalCount"
+            )
+            .textContent =
+                critical;
+
+
+        document
+            .getElementById(
+                "activeCount"
+            )
+            .textContent =
+                active;
+
+
+        document
+            .getElementById(
+                "resolvedCount"
+            )
+            .textContent =
+                resolved;
+
+
+        document
+            .getElementById(
+                "resourceCount"
+            )
+            .textContent =
+                currentResources.length;
+
+
+        document
+            .getElementById(
+                "availableResourceCount"
+            )
+            .textContent =
+                availableResources;
+    }
+
+
+
+    // =================================================
+    // SIDEBAR
+    // =================================================
+
+    function renderIncidentList() {
+
+        const container =
+            document
+            .getElementById(
+                "incidentList"
+            );
+
+
+        container.innerHTML =
+            "";
+
+
+        currentIncidents.forEach(
+            function(item) {
+
+                const incident =
+                    item.incident;
+
+
+                const priority =
+                    item.priority;
+
+
+                const priorityClass =
+                    getPriorityClass(
+                        incident,
+                        priority
+                    );
+
+
+                const hasGps = (
+
+                    incident.latitude
+                    !==
+                    null
+
+                    &&
+
+                    incident.longitude
+                    !==
+                    null
+                );
+
+
+                const card =
+                    document
+                    .createElement(
+                        "div"
+                    );
+
+
+                card.className =
+                    "incident-card";
+
+
+                if (
+                    incident.incident_id
+                    ===
+                    selectedIncidentId
+                ) {
+
+                    card.classList.add(
+                        "selected"
+                    );
+                }
+
+
+                if (
+                    !hasGps
+                ) {
+
+                    card.classList.add(
+                        "no-gps"
+                    );
+                }
+
+
+                card.style
+                    .borderLeftColor =
+                        getPriorityColor(
+                            priorityClass
+                        );
+
+
+                card.innerHTML =
+                    `
+
+                    <div
+                        class="
+                            incident-card-header
+                        "
+                    >
+
+                        <div
+                            class="incident-type"
+                        >
+
+                            ${
+                                escapeHtml(
+                                    incident.disaster_type
+                                )
+                            }
+
+                        </div>
+
+
+                        <div
+                            class="
+                                priority-badge
+                                ${priorityClass}
+                            "
+                        >
+
+                            ${
+                                escapeHtml(
+                                    priority.score
+                                )
+                            }
+
+                            ${
+                                escapeHtml(
+                                    priority.level
+                                )
+                            }
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="incident-location">
+
+                        📍
+
+                        ${
+                            escapeHtml(
+                                incident.location
+                            )
+                        }
+
+                    </div>
+
+
+                    <div class="incident-description">
+
+                        ${
+                            escapeHtml(
+                                incident.description
+                            )
+                        }
+
+                    </div>
+
+
+                    <div class="incident-meta">
+
+                        <span>
+
+                            👥
+
+                            ${
+                                escapeHtml(
+                                    incident.people_affected
+                                )
+                            }
+
+                        </span>
+
+
+                        <span>
+
+                            ${
+                                escapeHtml(
+                                    incident.status
+                                )
+                            }
+
+                        </span>
+
+                    </div>
+
+
+                    ${
+                        !hasGps
+
+                        ?
+
+                        `
+                        <div class="gps-warning">
+                            ⚠ GPS unavailable
+                        </div>
+                        `
+
+                        :
+
+                        ""
+                    }
+
+                    `;
+
+
+                if (
+                    hasGps
+                ) {
+
+                    card.addEventListener(
+
+                        "click",
+
+                        function() {
+
+                            selectIncident(
+                                incident
+                                .incident_id,
+
+                                true
+                            );
+                        }
+                    );
+                }
+
+
+                container
+                    .appendChild(
+                        card
+                    );
+            }
+        );
+    }
+
+
+
+    // =================================================
+    // MAP INCIDENTS
+    // =================================================
+
+    function renderIncidents() {
+
+        incidentLayer
+            .clearLayers();
+
+
+        markersByIncident =
+            {};
+
+
+        const bounds = [];
+
+
+        currentIncidents.forEach(
+            function(item) {
+
+                const incident =
+                    item.incident;
+
+
+                const priority =
+                    item.priority;
+
+
+                if (
+                    incident.latitude
+                    ===
+                    null
+
+                    ||
+
+                    incident.longitude
+                    ===
+                    null
+                ) {
+
+                    return;
+                }
+
+
+                const priorityClass =
+                    getPriorityClass(
+                        incident,
+                        priority
+                    );
+
+
+                const marker =
+                    L.marker(
+
+                        [
+                            incident.latitude,
+                            incident.longitude
+                        ],
+
+                        {
+
+                            icon:
+                                createIncidentIcon(
+                                    priorityClass
+                                )
+                        }
+                    );
+
+
+                marker.resqPriorityClass =
+                    priorityClass;
+
+
+                marker.bindPopup(
+
+                    buildIncidentPopup(
+                        incident,
+                        priority
+                    )
+                );
+
+
+                marker.on(
+
+                    "click",
+
+                    function() {
+
+                        selectIncident(
+                            incident
+                            .incident_id,
+
+                            false
+                        );
+                    }
+                );
+
+
+                incidentLayer
+                    .addLayer(
+                        marker
+                    );
+
+
+                markersByIncident[
+                    incident.incident_id
+                ] = marker;
+
+
+                bounds.push(
+                    [
+                        incident.latitude,
+                        incident.longitude
+                    ]
+                );
+            }
+        );
+
+
+        return bounds;
+    }
+
+
+
+    // =================================================
+    // MAP RESOURCES
+    // =================================================
+
+    function renderResources() {
+
+        resourceLayer
+            .clearLayers();
+
+
+        markersByResource =
+            {};
+
+
+        const bounds = [];
+
+
+        currentResources.forEach(
+            function(resource) {
+
+                if (
+                    resource.latitude
+                    ===
+                    null
+
+                    ||
+
+                    resource.longitude
+                    ===
+                    null
+                ) {
+
+                    return;
+                }
+
+
+                const marker =
+                    L.marker(
+
+                        [
+                            resource.latitude,
+                            resource.longitude
+                        ],
+
+                        {
+
+                            icon:
+                                createResourceIcon(
+                                    resource
+                                ),
+
+                            zIndexOffset:
+                                1000
+                        }
+                    );
+
+
+                marker.bindPopup(
+
+                    buildResourcePopup(
+                        resource
+                    )
+                );
+
+
+                resourceLayer
+                    .addLayer(
+                        marker
+                    );
+
+
+                markersByResource[
+                    resource.resource_id
+                ] = marker;
+
+
+                bounds.push(
+                    [
+                        resource.latitude,
+                        resource.longitude
+                    ]
+                );
+            }
+        );
+
+
+        return bounds;
+    }
+
+
+
+    // =================================================
+    // FIND INCIDENT
+    // =================================================
+
+    function findIncidentItem(
+        incidentId
+    ) {
+
+        return (
+            currentIncidents
+            .find(
+                item =>
+                    item.incident
+                    .incident_id
+                    ===
+                    incidentId
+            )
+            ||
+            null
+        );
+    }
+
+
+
+    // =================================================
+    // SELECT INCIDENT
+    // =================================================
+
+    async function selectIncident(
+        incidentId,
+        focusMap
+    ) {
+
+        selectedIncidentId =
+            incidentId;
+
+
+        currentDispatchPlan =
+            null;
+
+
+        routeLayer
+            .clearLayers();
+
+
+        renderIncidentList();
+
+
+        const item =
+            findIncidentItem(
+                incidentId
+            );
+
+
+        if (
+            !item
+        ) {
+
+            return;
+        }
+
+
+        const incident =
+            item.incident;
+
+
+        const priority =
+            item.priority;
+
+
+        // ---------------------------------------------
+        // Open command panel
+        // ---------------------------------------------
+
+        const panel =
+            document
+            .getElementById(
+                "dispatchPanel"
+            );
+
+
+        panel.classList.remove(
+            "hidden"
+        );
+
+
+        document
+            .getElementById(
+                "panelTitle"
+            )
+            .textContent =
+                incident
+                .disaster_type;
+
+
+        document
+            .getElementById(
+                "panelLocation"
+            )
+            .textContent =
+                incident
+                .location;
+
+
+        // ---------------------------------------------
+        // Focus map marker if selected from sidebar
+        // ---------------------------------------------
+
+        if (
+            focusMap
+        ) {
+
+            const marker =
+                markersByIncident[
+                    incidentId
+                ];
+
+
+            if (
+                marker
+            ) {
+
+                incidentLayer
+                    .zoomToShowLayer(
+
+                        marker,
+
+                        function() {
+
+                            marker.openPopup();
+                        }
+                    );
+            }
+        }
+
+
+        // ---------------------------------------------
+        // Basic incident information
+        // ---------------------------------------------
+
+        showIncidentLoadingPanel(
+            incident,
+            priority
+        );
+
+
+        // =============================================
+        // RESOLVED
+        // =============================================
+
+        if (
+            incident.status
+            ===
+            "resolved"
+        ) {
+
+            renderResolvedPanel(
+                incident,
+                priority
+            );
+
+            return;
+        }
+
+
+        // =============================================
+        // ASSIGNED / IN PROGRESS
+        // =============================================
+
+        if (
+            incident.status
+            ===
+            "assigned"
+
+            ||
+
+            incident.status
+            ===
+            "in_progress"
+        ) {
+
+            await loadAssignments(
+                incident,
+                priority
+            );
+
+            return;
+        }
+
+
+        // =============================================
+        // REPORTED / VERIFIED
+        //
+        // This is when GraphHopper gets called.
+        // =============================================
+
+        await loadDispatchRecommendation(
+            incident,
+            priority
+        );
+    }
+
+
+
+    // =================================================
+    // BASE PANEL
+    // =================================================
+
+    function getIncidentInfoHtml(
+        incident,
+        priority
+    ) {
+
+        const priorityClass =
+            getPriorityClass(
+                incident,
+                priority
+            );
+
+
+        const needs = (
+            incident.required_resources
+            ||
+            []
+        ).join(
+            ", "
+        );
+
+
+        return `
+
+            <div
+                class="
+                    selected-priority
+                    ${priorityClass}
+                "
+            >
+
+                ${
+                    escapeHtml(
+                        priority.score
+                    )
+                }
+
+                ${
+                    escapeHtml(
+                        priority.level
+                    )
+                }
+
+            </div>
+
+
+            <div class="incident-info">
+
+                <strong>Status:</strong>
+
+                ${
+                    escapeHtml(
+                        incident.status
+                    )
+                }
+
+                <br>
+
+
+                <strong>People:</strong>
+
+                ${
+                    escapeHtml(
+                        incident.people_affected
+                    )
+                }
+
+                <br>
+
+
+                <strong>Injuries:</strong>
+
+                ${
+                    escapeHtml(
+                        incident.injuries
+                    )
+                }
+
+                <br>
+
+
+                <strong>Needs:</strong>
+
+                ${
+                    escapeHtml(
+                        needs
+                    )
+                }
+
+            </div>
+        `;
+    }
+
+
+
+    function showIncidentLoadingPanel(
+        incident,
+        priority
+    ) {
+
+        document
+            .getElementById(
+                "dispatchPanelContent"
+            )
+            .innerHTML =
+                `
+                ${
+                    getIncidentInfoHtml(
+                        incident,
+                        priority
+                    )
+                }
+
+                <div class="loading">
+
+                    Finding the best
+                    rescue response...
+
+                </div>
+                `;
+    }
+
+
+
+    // =================================================
+    // DISPATCH RECOMMENDATION
+    // =================================================
+
+    async function loadDispatchRecommendation(
+        incident,
+        priority
+    ) {
+
+        try {
+
+            const response =
+                await fetch(
+
+                    `/incidents/${incident.incident_id}/dispatch-recommendation`
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (
+                !response.ok
+            ) {
+
+                throw new Error(
+                    data.detail
+                    ||
+                    "Dispatch calculation failed."
+                );
+            }
+
+
+            currentDispatchPlan =
+                data.dispatch_plan;
+
+
+            renderDispatchRecommendation(
+                incident,
+                priority,
+                data.dispatch_plan
+            );
+
+
+            drawDispatchRoutes(
+                incident,
+                data.dispatch_plan
+            );
+
+        }
+
+        catch (
+            error
+        ) {
+
+            document
+                .getElementById(
+                    "dispatchPanelContent"
+                )
+                .innerHTML =
+                    `
+                    ${
+                        getIncidentInfoHtml(
+                            incident,
+                            priority
+                        )
+                    }
+
+                    <div
+                        class="
+                            panel-message
+                            panel-error
+                        "
+                    >
+
+                        ${escapeHtml(
+                            error.message
+                        )}
+
+                    </div>
+                    `;
+        }
+    }
+
+
+
+    // =================================================
+    // RECOMMENDATION PANEL
+    // =================================================
+
+    function renderDispatchRecommendation(
+        incident,
+        priority,
+        plan
+    ) {
+
+        const recommendations =
+            plan.recommended_dispatches
+            ||
+            [];
+
+
+        let recommendationHtml =
+            "";
+
+
+        recommendations.forEach(
+            function(
+                recommendation
+            ) {
+
+                const resource =
+                    recommendation
+                    .resource;
+
+
+                const route =
+                    recommendation
+                    .route;
+
+
+                const covers = (
+                    recommendation.covers
+                    ||
+                    []
+                ).join(
+                    ", "
+                );
+
+
+                recommendationHtml +=
+                    `
+
+                    <div
+                        class="
+                            recommendation-card
+                        "
+                    >
+
+                        <div
+                            class="
+                                recommendation-name
+                            "
+                        >
+
+                            ${
+                                getResourceEmoji(
+                                    resource
+                                )
+                            }
+
+                            ${
+                                escapeHtml(
+                                    resource.name
+                                )
+                            }
+
+                        </div>
+
+
+                        <div
+                            class="
+                                recommendation-covers
+                            "
+                        >
+
+                            Covers:
+                            ${
+                                escapeHtml(
+                                    covers
+                                )
+                            }
+
+                        </div>
+
+
+                        <div
+                            class="route-metrics"
+                        >
+
+                            <div class="metric">
+
+                                <div
+                                    class="
+                                        metric-value
+                                    "
+                                >
+
+                                    ${
+                                        escapeHtml(
+                                            route.distance_km
+                                        )
+                                    }
+                                    km
+
+                                </div>
+
+                                <div
+                                    class="
+                                        metric-label
+                                    "
+                                >
+                                    Road distance
+                                </div>
+
+                            </div>
+
+
+                            <div class="metric">
+
+                                <div
+                                    class="
+                                        metric-value
+                                    "
+                                >
+
+                                    ${
+                                        escapeHtml(
+                                            route.eta_minutes
+                                        )
+                                    }
+                                    min
+
+                                </div>
+
+                                <div
+                                    class="
+                                        metric-label
+                                    "
+                                >
+                                    Estimated ETA
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                    `;
+            }
+        );
+
+
+        let unmetHtml =
+            "";
+
+
+        if (
+            plan.unmet_requirements
+            &&
+            plan.unmet_requirements.length
+            >
+            0
+        ) {
+
+            unmetHtml =
+                `
+                <div
+                    class="
+                        panel-message
+                        panel-error
+                    "
+                >
+
+                    Missing resources:
+                    ${
+                        escapeHtml(
+                            plan
+                            .unmet_requirements
+                            .join(", ")
+                        )
+                    }
+
+                </div>
+                `;
+        }
+
+
+        if (
+            recommendations.length
+            ===
+            0
+        ) {
+
+            recommendationHtml =
+                `
+                <div
+                    class="
+                        panel-message
+                        panel-error
+                    "
+                >
+
+                    No suitable available
+                    resources could be routed
+                    to this incident.
+
+                </div>
+                `;
+        }
+
+
+        document
+            .getElementById(
+                "dispatchPanelContent"
+            )
+            .innerHTML =
+                `
+
+                ${
+                    getIncidentInfoHtml(
+                        incident,
+                        priority
+                    )
+                }
+
+
+                <div
+                    class="
+                        dispatch-section-title
+                    "
+                >
+                    Recommended Response
+                </div>
+
+
+                ${recommendationHtml}
+
+
+                ${unmetHtml}
+
+
+                ${
+                    recommendations.length
+                    >
+                    0
+
+                    ?
+
+                    `
+                    <button
+                        class="
+                            action-button
+                            dispatch-button
+                        "
+
+                        onclick="
+                            dispatchSelectedResources()
+                        "
+                    >
+
+                        🚨 DISPATCH
+                        RECOMMENDED TEAM
+
+                    </button>
+                    `
+
+                    :
+
+                    ""
+                }
+
+
+                <button
+                    class="
+                        action-button
+                        recalculate-button
+                    "
+
+                    onclick="
+                        recalculateDispatch()
+                    "
+                >
+
+                    ↻ Recalculate Recommendation
+
+                </button>
+                `;
+    }
+
+
+
+    // =================================================
+    // GRAPH HOPPER ROUTE DRAWING
+    // =================================================
+
+    function geometryToLatLngs(
+        geometry
+    ) {
+
+        if (
+            !geometry
+        ) {
+
+            return [];
+        }
+
+
+        let coordinates =
+            geometry;
+
+
+        if (
+            geometry.coordinates
+        ) {
+
+            coordinates =
+                geometry.coordinates;
+        }
+
+
+        if (
+            !Array.isArray(
+                coordinates
+            )
+        ) {
+
+            return [];
+        }
+
+
+        return coordinates
+
+        .filter(
+            coordinate =>
+                Array.isArray(
+                    coordinate
+                )
+                &&
+                coordinate.length
+                >=
+                2
+        )
+
+        .map(
+            coordinate =>
+                [
+                    coordinate[1],
+                    coordinate[0]
+                ]
+        );
+    }
+
+
+
+    function drawDispatchRoutes(
+        incident,
+        plan
+    ) {
+
+        routeLayer
+            .clearLayers();
+
+
+        const routeBounds =
+            [];
+
+
+        const recommendations =
+            plan.recommended_dispatches
+            ||
+            [];
+
+
+        recommendations.forEach(
+            function(
+                recommendation
+            ) {
+
+                const resource =
+                    recommendation
+                    .resource;
+
+
+                const route =
+                    recommendation
+                    .route;
+
+
+                // -------------------------------------
+                // Highlight recommended resource
+                // -------------------------------------
+
+                if (
+                    resource.latitude
+                    !==
+                    null
+
+                    &&
+
+                    resource.longitude
+                    !==
+                    null
+                ) {
+
+                    L.circleMarker(
+
+                        [
+                            resource.latitude,
+                            resource.longitude
+                        ],
+
+                        {
+
+                            radius: 25,
+
+                            color:
+                                "#7c3aed",
+
+                            weight: 4,
+
+                            fillOpacity:
+                                0.08
+                        }
+
+                    ).addTo(
+                        routeLayer
+                    );
+
+
+                    routeBounds.push(
+                        [
+                            resource.latitude,
+                            resource.longitude
+                        ]
+                    );
+
+
+                    const resourceMarker =
+                        markersByResource[
+                            resource.resource_id
+                        ];
+
+
+                    if (
+                        resourceMarker
+                    ) {
+
+                        resourceMarker
+                            .openPopup();
+                    }
+                }
+
+
+                // -------------------------------------
+                // Actual GraphHopper geometry
+                // -------------------------------------
+
+                const latLngs =
+                    geometryToLatLngs(
+                        route.route_geometry
+                    );
+
+
+                if (
+                    latLngs.length
+                    >
+                    1
+                ) {
+
+                    L.polyline(
+
+                        latLngs,
+
+                        {
+
+                            color:
+                                "#7c3aed",
+
+                            weight: 6,
+
+                            opacity: 0.85
+                        }
+
+                    ).addTo(
+                        routeLayer
+                    );
+
+
+                    latLngs.forEach(
+                        point =>
+                            routeBounds
+                            .push(
+                                point
+                            )
+                    );
+                }
+            }
+        );
+
+
+        // ---------------------------------------------
+        // Highlight incident destination
+        // ---------------------------------------------
+
+        L.circleMarker(
+
+            [
+                incident.latitude,
+                incident.longitude
+            ],
+
+            {
+
+                radius: 20,
+
+                color:
+                    "#dc2626",
+
+                weight: 3,
+
+                fillOpacity:
+                    0.08
+            }
+
+        ).addTo(
+            routeLayer
+        );
+
+
+        routeBounds.push(
+            [
+                incident.latitude,
+                incident.longitude
+            ]
+        );
+
+
+        // ---------------------------------------------
+        // Fit route into view
+        // ---------------------------------------------
+
+        if (
+            routeBounds.length
+            >
+            1
+        ) {
+
+            map.fitBounds(
+
+                routeBounds,
+
+                {
+
+                    padding:
+                        [
+                            80,
+                            80
+                        ],
+
+                    maxZoom:
+                        15
+                }
+            );
+        }
+    }
+
+
+
+    // =================================================
+    // DISPATCH BUTTON
+    // =================================================
+
+    async function dispatchSelectedResources() {
+
+        if (
+            !selectedIncidentId
+            ||
+            !currentDispatchPlan
+        ) {
+
+            return;
+        }
+
+
+        const recommendations =
+            currentDispatchPlan
+            .recommended_dispatches
+            ||
+            [];
+
+
+        const resourceIds =
+            recommendations
+            .map(
+                recommendation =>
+                    recommendation
+                    .resource
+                    .resource_id
+            );
+
+
+        if (
+            resourceIds.length
+            ===
+            0
+        ) {
+
+            return;
+        }
+
+
+        const button =
+            document.querySelector(
+                ".dispatch-button"
+            );
+
+
+        if (
+            button
+        ) {
+
+            button.disabled =
+                true;
+
+            button.textContent =
+                "Dispatching...";
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+
+                    `/incidents/${selectedIncidentId}/assign`,
+
+                    {
+
+                        method:
+                            "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                resource_ids:
+                                    resourceIds
+                            })
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (
+                !response.ok
+            ) {
+
+                throw new Error(
+                    data.detail
+                    ||
+                    "Dispatch failed."
+                );
+            }
+
+
+            await loadDashboard();
+
+
+            const item =
+                findIncidentItem(
+                    selectedIncidentId
+                );
+
+
+            if (
+                item
+            ) {
+
+                renderAssignmentState(
+
+                    item.incident,
+
+                    item.priority,
+
+                    data.assignments,
+
+                    "Resources dispatched successfully."
+                );
+            }
+
+        }
+
+        catch (
+            error
+        ) {
+
+            showPanelError(
+                error.message
+            );
+        }
+    }
+
+
+
+    // =================================================
+    // ASSIGNMENTS
+    // =================================================
+
+    async function loadAssignments(
+        incident,
+        priority
+    ) {
+
+        try {
+
+            const response =
+                await fetch(
+
+                    `/incidents/${incident.incident_id}/assignments`
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (
+                !response.ok
+            ) {
+
+                throw new Error(
+                    data.detail
+                    ||
+                    "Could not load assignments."
+                );
+            }
+
+
+            renderAssignmentState(
+
+                incident,
+
+                priority,
+
+                data.assignments,
+
+                null
+            );
+
+        }
+
+        catch (
+            error
+        ) {
+
+            showPanelError(
+                error.message
+            );
+        }
+    }
+
+
+
+    function renderAssignmentState(
+        incident,
+        priority,
+        assignments,
+        message
+    ) {
+
+        let assignmentHtml =
+            "";
+
+
+        assignments.forEach(
+            function(
+                assignment
+            ) {
+
+                assignmentHtml +=
+                    `
+
+                    <div class="assignment-row">
+
+                        <strong>
+
+                            ${
+                                escapeHtml(
+                                    assignment.name
+                                )
+                            }
+
+                        </strong>
+
+                        <br>
+
+                        Resource:
+                        ${
+                            escapeHtml(
+                                assignment
+                                .resource_status
+                            )
+                        }
+
+                        <br>
+
+                        Mission:
+                        ${
+                            escapeHtml(
+                                assignment
+                                .assignment_status
+                            )
+                        }
+
+                    </div>
+                    `;
+            }
+        );
+
+
+        let actionButton =
+            "";
+
+
+        if (
+            incident.status
+            ===
+            "assigned"
+        ) {
+
+            actionButton =
+                `
+                <button
+                    class="
+                        action-button
+                        start-button
+                    "
+
+                    onclick="
+                        startSelectedResponse()
+                    "
+                >
+
+                    ▶ START RESPONSE
+
+                </button>
+
+
+                <button
+                    class="
+                        action-button
+                        resolve-button
+                    "
+
+                    onclick="
+                        resolveSelectedIncident()
+                    "
+                >
+
+                    ✓ MARK RESOLVED
+
+                </button>
+                `;
+        }
+
+
+        else if (
+            incident.status
+            ===
+            "in_progress"
+        ) {
+
+            actionButton =
+                `
+                <button
+                    class="
+                        action-button
+                        resolve-button
+                    "
+
+                    onclick="
+                        resolveSelectedIncident()
+                    "
+                >
+
+                    ✓ RESOLVE INCIDENT
+
+                </button>
+                `;
+        }
+
+
+        document
+            .getElementById(
+                "dispatchPanelContent"
+            )
+            .innerHTML =
+                `
+
+                ${
+                    getIncidentInfoHtml(
+                        incident,
+                        priority
+                    )
+                }
+
+
+                ${
+                    message
+
+                    ?
+
+                    `
+                    <div
+                        class="
+                            panel-message
+                            panel-success
+                        "
+                    >
+
+                        ${
+                            escapeHtml(
+                                message
+                            )
+                        }
+
+                    </div>
+                    `
+
+                    :
+
+                    ""
+                }
+
+
+                <div
+                    class="
+                        dispatch-section-title
+                    "
+                >
+                    Assigned Resources
+                </div>
+
+
+                ${assignmentHtml}
+
+
+                ${actionButton}
+                `;
+    }
+
+
+
+    // =================================================
+    // START RESPONSE
+    // =================================================
+
+    async function startSelectedResponse() {
+
+        if (
+            !selectedIncidentId
+        ) {
+
+            return;
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+
+                    `/incidents/${selectedIncidentId}/start`,
+
+                    {
+
+                        method:
+                            "POST"
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (
+                !response.ok
+            ) {
+
+                throw new Error(
+                    data.detail
+                    ||
+                    "Could not start response."
+                );
+            }
+
+
+            await loadDashboard();
+
+
+            const item =
+                findIncidentItem(
+                    selectedIncidentId
+                );
+
+
+            if (
+                item
+            ) {
+
+                renderAssignmentState(
+
+                    item.incident,
+
+                    item.priority,
+
+                    data.assignments,
+
+                    "Emergency response is now in progress."
+                );
+            }
+
+        }
+
+        catch (
+            error
+        ) {
+
+            showPanelError(
+                error.message
+            );
+        }
+    }
+
+
+
+    // =================================================
+    // RESOLVE INCIDENT
+    // =================================================
+
+    async function resolveSelectedIncident() {
+
+        if (
+            !selectedIncidentId
+        ) {
+
+            return;
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+
+                    `/incidents/${selectedIncidentId}/resolve`,
+
+                    {
+
+                        method:
+                            "POST"
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (
+                !response.ok
+            ) {
+
+                throw new Error(
+                    data.detail
+                    ||
+                    "Could not resolve incident."
+                );
+            }
+
+
+            routeLayer
+                .clearLayers();
+
+
+            currentDispatchPlan =
+                null;
+
+
+            await loadDashboard();
+
+
+            const item =
+                findIncidentItem(
+                    selectedIncidentId
+                );
+
+
+            if (
+                item
+            ) {
+
+                renderResolvedPanel(
+
+                    item.incident,
+
+                    item.priority,
+
+                    "Incident resolved. Resources released."
+                );
+            }
+
+        }
+
+        catch (
+            error
+        ) {
+
+            showPanelError(
+                error.message
+            );
+        }
+    }
+
+
+
+    // =================================================
+    // RESOLVED PANEL
+    // =================================================
+
+    function renderResolvedPanel(
+        incident,
+        priority,
+        message
+    ) {
+
+        document
+            .getElementById(
+                "dispatchPanelContent"
+            )
+            .innerHTML =
+                `
+
+                ${
+                    getIncidentInfoHtml(
+                        incident,
+                        priority
+                    )
+                }
+
+
+                <div
+                    class="
+                        panel-message
+                        panel-success
+                    "
+                >
+
+                    ${
+                        escapeHtml(
+                            message
+                            ||
+                            "This incident has been resolved."
+                        )
+                    }
+
+                </div>
+                `;
+    }
+
+
+
+    // =================================================
+    // PANEL ERROR
+    // =================================================
+
+    function showPanelError(
+        message
+    ) {
+
+        const content =
+            document
+            .getElementById(
+                "dispatchPanelContent"
+            );
+
+
+        content.innerHTML +=
+            `
+            <div
+                class="
+                    panel-message
+                    panel-error
+                "
+            >
+
+                ${
+                    escapeHtml(
+                        message
+                    )
+                }
+
+            </div>
+            `;
+    }
+
+
+
+    // =================================================
+    // RECALCULATE
+    // =================================================
+
+    async function recalculateDispatch() {
+
+        if (
+            !selectedIncidentId
+        ) {
+
+            return;
+        }
+
+
+        await selectIncident(
+            selectedIncidentId,
+            false
+        );
+    }
+
+
+
+    // =================================================
+    // CLOSE PANEL
+    // =================================================
+
+    function closeDispatchPanel() {
+
+        document
+            .getElementById(
+                "dispatchPanel"
+            )
+            .classList
+            .add(
+                "hidden"
+            );
+
+
+        selectedIncidentId =
+            null;
+
+
+        currentDispatchPlan =
+            null;
+
+
+        routeLayer
+            .clearLayers();
+
+
+        renderIncidentList();
+    }
+
+
+
+    // =================================================
+    // LOAD DASHBOARD DATA
+    // =================================================
+
+    async function loadDashboard() {
+
+        try {
+
+            const [
+                incidentResponse,
+                resourceResponse
+            ] = await Promise.all(
+
+                [
+
+                    fetch(
+                        "/incidents"
+                    ),
+
+                    fetch(
+                        "/resources"
+                    )
+
+                ]
+            );
+
+
+            if (
+                !incidentResponse.ok
+            ) {
+
+                throw new Error(
+                    "Could not load incidents."
+                );
+            }
+
+
+            if (
+                !resourceResponse.ok
+            ) {
+
+                throw new Error(
+                    "Could not load resources."
+                );
+            }
+
+
+            currentIncidents =
+                await incidentResponse
+                .json();
+
+
+            currentResources =
+                await resourceResponse
+                .json();
+
+
+            updateStats();
+
+
+            renderIncidentList();
+
+
+            const incidentBounds =
+                renderIncidents();
+
+
+            const resourceBounds =
+                renderResources();
+
+
+            if (
+                !hasFittedMap
+            ) {
+
+                const allBounds = [
+
+                    ...incidentBounds,
+
+                    ...resourceBounds
+
+                ];
+
+
+                if (
+                    allBounds.length
+                    >
+                    0
+                ) {
+
+                    map.fitBounds(
+
+                        allBounds,
+
+                        {
+
+                            padding:
+                                [
+                                    60,
+                                    60
+                                ],
+
+                            maxZoom:
+                                14
+                        }
+                    );
+
+
+                    hasFittedMap =
+                        true;
+                }
+            }
+
+
+            document
+                .getElementById(
+                    "lastUpdated"
+                )
+                .textContent =
+                    new Date()
+                    .toLocaleTimeString();
+
+        }
+
+        catch (
+            error
+        ) {
+
+            console.error(
+                "Dashboard error:",
+                error
+            );
+
+
+            document
+                .getElementById(
+                    "lastUpdated"
+                )
+                .textContent =
+                    "Connection error";
+        }
+    }
+
+
+
+    // =================================================
+    // START
+    // =================================================
+
+    loadDashboard();
+
+
+
+    // =================================================
+    // LIVE REFRESH
+    //
+    // IMPORTANT:
+    //
+    // This refreshes marker positions/statuses but does
+    // NOT call the GraphHopper dispatch endpoint again.
+    //
+    // Routing only happens when the operator selects
+    // or recalculates an incident.
+    // =================================================
+
+    setInterval(
+        loadDashboard,
+        10000
+    );
+
+</script>
+
+
+</body>
+
+</html>
