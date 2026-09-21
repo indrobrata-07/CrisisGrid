@@ -5,6 +5,20 @@ from database import init_db
 from models.incident import Incident
 from models.resource import Resource
 
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+app = FastAPI()
+
+# Add CORS Middleware to allow requests from Vercel
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins (including your Vercel URL)
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 from schemas import (
     EmergencyReport,
     IncidentDescriptionUpdate,
