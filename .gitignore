@@ -1,4 +1,4 @@
-.env
+.env.example
 
 resq.db
 resq.db-shm
