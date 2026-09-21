@@ -56,7 +56,7 @@ from frontend import router as frontend_router
 # ===================================================
 
 app = FastAPI(
-    title="ResQ API",
+    title="CrisisGrid API",
     description=(
         "AI-Powered Disaster Response "
         "Coordination Backend"

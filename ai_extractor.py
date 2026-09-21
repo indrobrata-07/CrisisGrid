@@ -24,7 +24,7 @@ def extract_incident_data(description: str) -> ExtractedIncident:
 
     prompt = f"""
 You are an information extraction system for a disaster-response
-prototype called ResQ.
+prototype called CrisisGrid.
 
 Extract structured emergency information from the report below.
 

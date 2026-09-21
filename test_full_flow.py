@@ -15,7 +15,7 @@ BASE_URL = "http://127.0.0.1:8000"
 
 def request(method, endpoint, **kwargs):
     """
-    Send a request to the ResQ backend.
+    Send a request to the CrisisGrid backend.
 
     If something goes wrong, print the backend's
     response clearly and stop the test.
@@ -359,7 +359,7 @@ if not recommended:
 
     print()
     print(
-        "❌ ResQ could not recommend "
+        "❌ CrisisGrid could not recommend "
         "any dispatch resources."
     )
 
@@ -653,7 +653,7 @@ if (
 ):
 
     print(
-        "🔥 RESQ END-TO-END TEST PASSED 🔥"
+        "🔥 CrisisGrid END-TO-END TEST PASSED 🔥"
     )
 
     print()
