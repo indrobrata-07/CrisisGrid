@@ -374,6 +374,7 @@ resq/
 ├── .env.example
 ├── .gitignore
 └── README.md
+```
 
 ## 🛣️ Future Roadmap
 
@@ -414,14 +415,10 @@ The proposed direction is to use **long-range mesh links between participating d
 
 ### TEAM MEMBERS
 
-#### ADIL ASHFAQ
+**ADIL ASHFAQ**
 
-#### INDROBRATA SARKAR
+**INDROBRATA SARKAR**
 
-#### RUDRANIL MUKHERJEE
+**RUDRANIL MUKHERJEE**
 
-#### SK RAKIB
-
-
-
-
+**SK RAKIB**
