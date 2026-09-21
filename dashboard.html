@@ -10,7 +10,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>CrisisGrid Command Center</title>
+    <title>ResQ Command Center</title>
 
 
     <!-- =================================================
@@ -609,7 +609,7 @@
            CLUSTERS
         ================================================== */
 
-        .resQ-cluster {
+        .resq-cluster {
 
             width: 42px;
 
@@ -1365,7 +1365,7 @@
         <div>
 
             <h1>
-                CrisisGrid Command Center
+                ResQ Command Center
             </h1>
 
             <div class="brand-subtitle">
@@ -1809,7 +1809,13 @@
 
 
 <script>
-    const API_BASE_URL = "https://crisisgrid-alq9.onrender.com";
+
+    // =================================================
+    // API BASE URL
+    // =================================================
+
+   const API_BASE_URL = "https://crisisgrid-alq9.onrender.com";
+
 
     // =================================================
     // MAP
@@ -3529,7 +3535,7 @@
             const response =
                 await fetch(
 
-                    `/incidents/${incident.incident_id}/dispatch-recommendation`
+                    `${API_BASE_URL}/incidents/${incident.incident_id}/dispatch-recommendation`
                 );
 
 
@@ -4241,7 +4247,7 @@
             const response =
                 await fetch(
 
-                    `/incidents/${selectedIncidentId}/assign`,
+                    `${API_BASE_URL}/incidents/${selectedIncidentId}/assign`,
 
                     {
 
@@ -4333,7 +4339,7 @@
             const response =
                 await fetch(
 
-                    `/incidents/${incident.incident_id}/assignments`
+                    `${API_BASE_URL}/incidents/${incident.incident_id}/assignments`
                 );
 
 
@@ -4587,7 +4593,7 @@
             const response =
                 await fetch(
 
-                    `/incidents/${selectedIncidentId}/start`,
+                    `${API_BASE_URL}/incidents/${selectedIncidentId}/start`,
 
                     {
 
@@ -4671,7 +4677,7 @@
             const response =
                 await fetch(
 
-                    `/incidents/${selectedIncidentId}/resolve`,
+                    `${API_BASE_URL}/incidents/${selectedIncidentId}/resolve`,
 
                     {
 
@@ -4895,11 +4901,11 @@
                 [
 
                     fetch(
-                        "/incidents"
+                        `${API_BASE_URL}/incidents`
                     ),
 
                     fetch(
-                        "/resources"
+                        `${API_BASE_URL}/resources`
                     )
 
                 ]
