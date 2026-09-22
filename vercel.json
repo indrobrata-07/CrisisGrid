@@ -1,5 +1,6 @@
 {
-  "builds": [
-    { "src": "*.html", "use": "@vercel/static" }
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/", "destination": "/report.html" }
   ]
 }
