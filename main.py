@@ -1,6 +1,9 @@
-from fastapi import FastAPI, HTTPException
+import os
+from fastapi import FastAPI, HTTPException, Header
+from fastapi.middleware.cors import CORSMiddleware
 
 from database import init_db
+from clear_incidents import clear_incidents
 
 from models.incident import Incident
 from models.resource import Resource
@@ -51,17 +54,17 @@ from dispatch_engine import build_dispatch_plan
 from frontend import router as frontend_router
 
 
-# ===================================================
-# FASTAPI APPLICATION
-# ===================================================
 
-app = FastAPI(
-    title="CrisisGrid API",
-    description=(
-        "AI-Powered Disaster Response "
-        "Coordination Backend"
-    ),
-    version="1.1.0",
+
+
+app = FastAPI(title="ResQ API", version="1.1.0")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows requests from Vercel
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
@@ -237,6 +240,99 @@ def list_incidents():
 
 
     return result
+
+# ---------------------------------------------------
+# ADMIN: CLEAR ALL INCIDENTS
+# ---------------------------------------------------
+
+@app.delete("/admin/incidents")
+def clear_all_incidents(
+    x_admin_token: str = Header(
+        ...,
+        alias="X-Admin-Token"
+    )
+):
+
+    # ===============================================
+    # CHECK ADMIN TOKEN
+    # ===============================================
+
+    expected_token = os.getenv(
+        "ADMIN_CLEANUP_TOKEN"
+    )
+
+
+    if not expected_token:
+
+        raise HTTPException(
+            status_code=500,
+            detail=(
+                "ADMIN_CLEANUP_TOKEN "
+                "is not configured"
+            ),
+        )
+
+
+    if x_admin_token != expected_token:
+
+        raise HTTPException(
+            status_code=403,
+            detail="Invalid admin token",
+        )
+
+
+    # ===============================================
+    # CLEAR INCIDENTS
+    # ===============================================
+
+    try:
+
+        clear_incidents()
+
+    except Exception as error:
+
+        raise HTTPException(
+            status_code=500,
+            detail=(
+                "Incident cleanup failed: "
+                f"{str(error)}"
+            ),
+        )
+
+
+    # ===============================================
+    # VERIFY CLEANUP
+    # ===============================================
+
+    remaining_incidents = (
+        get_all_incidents()
+    )
+
+
+    if remaining_incidents:
+
+        raise HTTPException(
+            status_code=500,
+            detail=(
+                "Cleanup failed. "
+                f"{len(remaining_incidents)} "
+                "incidents remain."
+            ),
+        )
+
+
+    # ===============================================
+    # SUCCESS
+    # ===============================================
+
+    return {
+
+        "message":
+            "All incidents cleared successfully",
+
+        "remaining_incidents":
+            0,
+    }
 
 
 # ---------------------------------------------------

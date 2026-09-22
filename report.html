@@ -1051,7 +1051,7 @@
     <div class="brand">
 
         <div class="logo">
-            R
+            C
         </div>
 
         <div>
@@ -1069,13 +1069,7 @@
     </div>
 
 
-    <a
-        class="command-link"
-        href="/dashboard"
-    >
-        Command Center →
-    </a>
-
+    
 </header>
 
 
@@ -1419,7 +1413,13 @@
 
 
 <script>
+
+    // =================================================
+    // API BASE URL
+    // =================================================
+
     const API_BASE_URL = "https://crisisgrid-alq9.onrender.com";
+
 
     // =================================================
     // STATE
@@ -1753,7 +1753,7 @@
 
 
         showMessage(
-            "CrisisGrid is analyzing the report and creating the incident...",
+            "ResQ is analyzing the report and creating the incident...",
             "info"
         );
 
@@ -1763,7 +1763,7 @@
             const response =
                 await fetch(
 
-                    "/incidents",
+                    `${API_BASE_URL}/incidents`,
 
                     {
 
