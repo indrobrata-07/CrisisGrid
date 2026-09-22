@@ -42,6 +42,44 @@ A single report might contain information about trapped people, injuries, vulner
 
 The platform combines **AI-powered report understanding, incident prioritization, rescue-resource matching, route generation, and geographic visualization** into one connected workflow.
 
+## 🌐 Live Demo
+
+### 📝 Report Portal
+
+Submit emergency reports through the CrisisGrid reporting interface.
+
+**https://crisisgrid-web.vercel.app/report.html**
+
+### 📊 Crisis Dashboard
+
+View submitted incidents, priorities, locations, and resource information.
+
+**https://crisisgrid-web.vercel.app/dashboard.html**
+
+### 🎥 Live Demo Video
+
+Watch a recorded demonstration of the complete CrisisGrid workflow.
+
+**YouTube:** `<YOUTUBE_VIDEO_LINK>`
+
+## 📸 Screenshots
+
+### Report Portal
+
+![CrisisGrid Report Portal](screenshots/report-page.png)
+
+### Crisis Dashboard
+
+![CrisisGrid Dashboard](screenshots/dashboard.png)
+
+## ⚙️ Deployment
+
+* **Frontend:** Vercel
+* **Backend API:** Render — `<RENDER_BACKEND_URL>`
+* **API Documentation:** Swagger UI — `<SWAGGER_URL>`
+
+The frontend is deployed on Vercel and communicates with the FastAPI backend deployed on Render.
+
 ### 🎯 The Goal
 
 CrisisGrid is designed to help answer the key questions that arise during emergency response:
