@@ -11,14 +11,12 @@ It brings **AI-powered information extraction, priority analysis, resource match
 ---
 
 <p align="center">
-
-**🚨 Report** → **🧠 Understand** → **⚡ Prioritize** → **🚑 Match** → **🗺️ Route** → **📍 Respond**
-
+<strong>🚨 Report</strong> → <strong>🧠 Understand</strong> → <strong>⚡ Prioritize</strong> → <strong>🚑 Match</strong> → <strong>🗺️ Route</strong> → <strong>📍 Respond</strong>
 </p>
 
 ---
 
-### 🚧 Project Status
+## 🚧 Project Status
 
 **Active Prototype**
 
@@ -26,7 +24,7 @@ CrisisGrid is currently being developed as a functional prototype demonstrating 
 
 ---
 
-### ✨ Built With
+## ✨ Built With
 
 `Python` · `FastAPI` · `Google Gemini` · `GraphHopper` · `JavaScript` · `Leaflet`
 
@@ -41,6 +39,22 @@ A single report might contain information about trapped people, injuries, vulner
 **CrisisGrid** helps turn these reports into structured, actionable information for emergency coordination.
 
 The platform combines **AI-powered report understanding, incident prioritization, rescue-resource matching, route generation, and geographic visualization** into one connected workflow.
+
+## 🎯 The Goal
+
+CrisisGrid is designed to help answer the key questions that arise during emergency response:
+
+* 🚨 **What happened?**
+* 📍 **Where is it happening?**
+* 👥 **How many people are affected?**
+* ⚠️ **How urgent is the situation?**
+* 🚑 **What resources are needed?**
+* 🧭 **Which available resource can respond?**
+* 🗺️ **What route should the response team take?**
+* 🚧 **What happens if the route becomes blocked?**
+
+Instead of treating each of these as separate tasks, CrisisGrid connects them into a single response pipeline.
+
 
 ## 🌐 Live Demo
 
@@ -65,14 +79,16 @@ Watch a recorded demonstration of the complete CrisisGrid workflow.
 ## 📸 Project Screenshots
 
 ### Emergency Reporting Interface
+
 ![Emergency Reporting Interface](assets/screenshots/report-page.png)
 
 ### Live Incident Dashboard
+
 ![Live Incident Dashboard](assets/screenshots/dashboard1.png)
 
 ### Command Center
-![Command Center](assets/screenshots/dashboard2.png)
 
+![Command Center](assets/screenshots/dashboard2.png)
 
 ## ⚙️ Deployment
 
@@ -82,20 +98,6 @@ Watch a recorded demonstration of the complete CrisisGrid workflow.
 
 The frontend is deployed on Vercel and communicates with the FastAPI backend deployed on Render.
 
-### 🎯 The Goal
-
-CrisisGrid is designed to help answer the key questions that arise during emergency response:
-
-* 🚨 **What happened?**
-* 📍 **Where is it happening?**
-* 👥 **How many people are affected?**
-* ⚠️ **How urgent is the situation?**
-* 🚑 **What resources are needed?**
-* 🧭 **Which available resource can respond?**
-* 🗺️ **What route should the response team take?**
-* 🚧 **What happens if the route becomes blocked?**
-
-Instead of treating each of these as separate tasks, CrisisGrid connects them into a single response pipeline.
 
 ---
 
@@ -382,7 +384,14 @@ The AI layer is used as an **information-extraction and decision-support compone
 ## Project Structure
 
 ```text
-resq/
+CrisisGrid/
+│
+├── assets/
+│   └── screenshots/
+│       ├── .gitkeep
+│       ├── dashboard1.png
+│       ├── dashboard2.png
+│       └── report-page.png
 │
 ├── models/
 │   ├── __init__.py
@@ -413,6 +422,7 @@ resq/
 ├── requirements.txt
 ├── .env.example
 ├── .gitignore
+├── .vercelignore
 └── README.md
 ```
 
@@ -455,7 +465,7 @@ The proposed direction is to use **long-range mesh links between participating d
 
 ### TEAM MEMBERS
 
-**ADIL ASHFAQ**
+**MD ADIL ASHFAQ IQBAL**
 
 **INDROBRATA SARKAR**
 
