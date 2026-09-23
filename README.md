@@ -62,21 +62,23 @@ Watch a recorded demonstration of the complete CrisisGrid workflow.
 
 **YouTube:** `<YOUTUBE_VIDEO_LINK>`
 
-## 📸 Screenshots
+## 📸 Project Screenshots
 
-### Report Portal
+### Emergency Reporting Interface
+![Emergency Reporting Interface](assets/screenshots/report-page.png)
 
-![CrisisGrid Report Portal](screenshots/report-page.png)
+### Live Incident Dashboard
+![Live Incident Dashboard](assets/screenshots/dashboard1.png)
 
-### Crisis Dashboard
+### Command Center
+![Command Center](assets/screenshots/dashboard2.png)
 
-![CrisisGrid Dashboard](screenshots/dashboard.png)
 
 ## ⚙️ Deployment
 
 * **Frontend:** Vercel
-* **Backend API:** Render — `<RENDER_BACKEND_URL>`
-* **API Documentation:** Swagger UI — `<SWAGGER_URL>`
+* **Backend API:** Render — https://crisisgrid-alq9.onrender.com
+* **API Documentation:** Swagger UI — https://crisisgrid-alq9.onrender.com/docs
 
 The frontend is deployed on Vercel and communicates with the FastAPI backend deployed on Render.
 
