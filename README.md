@@ -32,13 +32,11 @@ CrisisGrid is currently being developed as a functional prototype demonstrating 
 
 ## 🧭 What is CrisisGrid?
 
-During a disaster, emergency information can arrive from many people at the same time — often as incomplete, unstructured messages.
+During a disaster, emergency information can arrive from multiple sources simultaneously, often as incomplete and unstructured natural-language reports.
 
-A single report might contain information about trapped people, injuries, vulnerable individuals, flooding, blocked roads, or urgent resource requirements.
+A single report may contain critical information about **trapped people, injuries, vulnerable individuals, flooding, blocked roads, or required emergency resources**, making manual interpretation and coordination difficult at scale.
 
-**CrisisGrid** helps turn these reports into structured, actionable information for emergency coordination.
-
-The platform combines **AI-powered report understanding, incident prioritization, rescue-resource matching, route generation, and geographic visualization** into one connected workflow.
+The platform integrates **AI-based information extraction, rule-based incident prioritization, resource matching, route generation, and geographic visualization** into a unified pipeline, connecting **report ingestion → incident processing → priority assessment → resource assignment → route planning → dashboard-based coordination**.
 
 ## 🎯 The Goal
 
@@ -74,7 +72,7 @@ View submitted incidents, priorities, locations, and resource information.
 
 Watch a recorded demonstration of the complete CrisisGrid workflow.
 
-**YouTube:** `<YOUTUBE_VIDEO_LINK>`
+**YouTube:** https://youtu.be/DpQ9OZ7B1Po
 
 ## 📸 Project Screenshots
 
