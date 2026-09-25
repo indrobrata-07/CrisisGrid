@@ -456,6 +456,11 @@ The proposed direction is to use **long-range mesh links between participating d
 
 > Build a response network that remains useful when information is scarce, connectivity is unreliable, and every minute matters.
 
+## ⚠️ Known Deployment Limitations
+
+- **Render:** The backend may spin down after ~15 minutes of inactivity. So, previously created **Resources and Incidents may reset to 0**, so demo data may need to be recreated.
+- **Gemini API:** Temporary model overload can cause a `503 Service Unavailable` error, which may temporarily prevent AI extraction. Retrying the request usually resolves it.
+
 ## 👥 TEAM — AROMATIC 960
 
 **INNOVATION • TECHNOLOGY • REAL-WORLD SOLUTIONS**
