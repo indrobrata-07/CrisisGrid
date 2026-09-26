@@ -1,4 +1,6 @@
+```python
 import os
+import time
 
 from dotenv import load_dotenv
 from google import genai
@@ -75,20 +77,42 @@ Emergency report:
 {description}
 """
 
-    response = client.models.generate_content(
-        model="gemini-3.6-flash",
-        contents=prompt,
-        config=types.GenerateContentConfig(
-            response_mime_type="application/json",
-            response_schema=ExtractedIncident,
-        ),
-    )
+    max_retries = 3
 
-    if not response.text:
-        raise ValueError(
-            "Gemini returned an empty response."
-        )
+    for attempt in range(max_retries):
+        try:
+            response = client.models.generate_content(
+                model="gemini-3.6-flash",
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json",
+                    response_schema=ExtractedIncident,
+                ),
+            )
 
-    return ExtractedIncident.model_validate_json(
-        response.text
-    )
+            if not response.text:
+                raise ValueError(
+                    "Gemini returned an empty response."
+                )
+
+            return ExtractedIncident.model_validate_json(
+                response.text
+            )
+
+        except Exception as e:
+
+            error_message = str(e)
+
+            # Retry temporary Gemini/API availability errors
+            if any(
+                code in error_message
+                for code in ["429", "500", "502", "503", "504"]
+            ):
+                if attempt < max_retries - 1:
+                    delay = 2 ** attempt
+                    time.sleep(delay)
+                    continue
+
+            # Re-raise all non-retryable errors
+            raise
+```
